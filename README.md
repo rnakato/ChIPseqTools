@@ -72,7 +72,7 @@ proportion of peaks against whole genome
 
 proportion of peaks against whole genome (distinguish exon and instron)
 
-    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2
+    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2 --intron
 
 #### 3.3. peak_occurance
 
