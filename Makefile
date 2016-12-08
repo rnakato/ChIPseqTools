@@ -12,7 +12,7 @@ SSPSRCDIR = $(SSPDIR)/src
 SSPOBJDIR = $(SSPDIR)/obj
 ALGLIBDIR = $(SSPSRCDIR)/alglib
 
-PROGRAMS = gtf2refFlat compare_bed2tss peak_occurance multibed2gene
+PROGRAMS = gtf2refFlat compare_bed2tss peak_occurance multibed2gene compare_bs
 TARGET = $(addprefix $(BINDIR)/,$(PROGRAMS))
 #$(warning $(TARGET))
 
@@ -42,6 +42,9 @@ $(BINDIR)/peak_occurance: $(OBJS_PO) $(OBJS_UTIL)
 $(BINDIR)/multibed2gene: $(OBJS_MG) $(OBJS_UTIL)
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	$(CC) -o $@ $^ $(LIBS)
+$(BINDIR)/compare_bs: src/compare_bs.c
+	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
+	gcc -o $@ $^ -Wall -W -O3 -lm
 
 $(LIBDIR)/libalglib.a:
 	make -C $(ALGLIBDIR)
