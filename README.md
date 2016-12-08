@@ -30,6 +30,19 @@ For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp dir
 
 #### 3.1. gtf2refFlat
 
+#### 3.2. compare_bs
+
+    # output shared peaks between bed1 and bed2
+    compare_bs -1 <bed1> -2 <bed2> -and
+    # output bed1-unique peaks
+    compare_bs -1 <bed1> -2 <bed2> -not
+    # output stats only
+    compare_bs -1 <bed1> -2 <bed2> -and -nobs
+    # include neighboring peaks within 5kbp as overlaped peaks
+    compare_bs -1 <bed1> -2 <bed2> -and -l 5000
+    # consider peak summit (default: whole peak region)
+    compare_bs -1 <bed1> -2 <bed2> -and -maxposi
+
 #### 3.2. compare_bed2tss
 
     # gene (gtf) and peaks
