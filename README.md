@@ -64,11 +64,11 @@ gene (refFlat) and peaks
     
 comare with gene body 
 
-    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 1
+     compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 1
     
 proportion of peaks against whole genome
 
-    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2
+     compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2
 
 #### 3.3. peak_occurance
 
