@@ -32,6 +32,15 @@ For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp dir
 
 #### 3.2. compare_bed2tss
 
+    # gene (gtf) and peaks
+    compare_bed2tss -g <gtf> -b <peak> --gt <genome table>
+    # gene (refFlat) and peaks
+    compare_bed2tss -g <refFlat> --refFlat -b <peak> --gt <genome table>
+    # comare with gene body 
+    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 1
+    # proportion of peaks against whole genome
+    compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2
+
 #### 3.3. peak_occurance
 
 #### 3.4. multibed2gene
