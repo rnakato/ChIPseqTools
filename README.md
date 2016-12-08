@@ -1,53 +1,37 @@
-# DROMPAplus
+# ChIPseqTools
 
 #1. Overview
-DROMPA (DRaw and Observe Multiple enrichment Profiles and Annotation) is a program for user-friendly and flexible ChIP-seq pipelining. DROMPA can be used for quality check, PCRbias filtering, normalization, peak calling, visualization and other multiple analyses of ChIP-seq data. DROMPA is specially designed so that it is easy to handle, and for users without a strong bioinformatics background.
+This repository contains several utility tools mainly for ChIP-seq analysis.
+These programs are written in C++ using [Boost library](http://www.boost.org/).
 
 #2. Install
-DROMPAplus is written in C++ and requires the following programs and libraries:
-* [Boost C++ library](http://www.boost.org/)
-* [Cairo libraries](http://www.cairographics.org/)
-* [GTK library](http://www.gtk.org/)
-* [GNU Scientific Library](http://www.gnu.org/software/gsl/)
-* [zlib](http://www.zlib.net/)
-* [SAMtools](http://samtools.sourceforge.net/) (for BAM formatted input)
-* [R](http://www.r-project.org/) (for PROFILE command)
 
 #### 2.1. Install required libraries
 for Ubuntu:
 
-    sudo apt-get install git build-essential libgtk2.0-dev libboost-all-dev \
-    libgsl-dev libz-dev samtools r-base
+    sudo apt-get install git build-essential libboost-all-dev
  
 for CentOS:
 
-    sudo yum -y install git gcc-c++ boost-devel zlib-devel gsl-devel gtk2-devel
-and install samtools from [the website](http://samtools.sourceforge.net/).
+    sudo yum -y install git gcc-c++ boost-devel
 
-#### 2.2. Install cpdf
- DROMPA uses Coherent PDF (http://community.coherentpdf.com/) for merging pdf files.
- 
-     wget http://github.com/coherentgraphics/cpdf-binaries/archive/master.zip
-     unzip master.zip
-    
-#### 2.3. Install DROMPAplus
-    git clone https://github.com/rnakato/DROMPAplus.git
-    git clone https://github.com/rnakato/SSP.git DROMPAplus/src/SSP
-    cd DROMPAplus
+#### 2.3. Install 
+    git clone https://github.com/rnakato/ChIPseqTools.git
+    git clone https://github.com/rnakato/SSP.git DROMPAplus/src/ChIPseqTools
+    cd ChIPseqTools
     make
-
-If you get an installation error, make sure that all required libraries are installed.
 
 #### 2.4. Add the PATH environment variable
 For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp directory, type:
 
-    export PATH = $PATH:$HOME/my_chipseq_exp/DROMPAplus/bin
-    export PATH = $PATH:$HOME/my_chipseq_exp/cpdf-binaries-master/Linux-Intel-**bit
+    export PATH = $PATH:$HOME/my_chipseq_exp/ChIPseqTools/bin
 
 #3. Usage
- See Manual.pdf for detail.
 
-#4. Reference
-1. Nakato R., Shirahige K. Recent advances in ChIP-seq analysis: from quality management to whole-genome annotation, Briefings in Bioinformatics, 2016.
+#### 3.1. gtf2refFlat
 
-2. Nakato, R., Itoh T. and Shirahige K.: DROMPA: easy-to-handle peak calling and visualization software for the computational analysis and validation of ChIP-seq data, Genes to Cells, vol.18, issue 7, 2013.
+#### 3.2. compare_bed2tss
+
+#### 3.3. peak_occurance
+
+#### 3.4. multibed2gene
