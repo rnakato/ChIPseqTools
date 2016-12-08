@@ -35,28 +35,39 @@ For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp dir
 output shared peaks between bed1 and bed2
 
     compare_bs -1 <bed1> -2 <bed2> -and
+    
 output bed1-unique peaks
 
     compare_bs -1 <bed1> -2 <bed2> -not
 
 output stats only
+
     compare_bs -1 <bed1> -2 <bed2> -and -nobs
 
 include neighboring peaks within 5kbp as overlaped peaks
+
     compare_bs -1 <bed1> -2 <bed2> -and -l 5000
 
 consider peak summit (default: whole peak region)
+
     compare_bs -1 <bed1> -2 <bed2> -and -maxposi
 
 #### 3.2. compare_bed2tss
 
-    # gene (gtf) and peaks
+gene (gtf) and peaks
+
     compare_bed2tss -g <gtf> -b <peak> --gt <genome table>
-    # gene (refFlat) and peaks
+    
+gene (refFlat) and peaks
+
     compare_bed2tss -g <refFlat> --refFlat -b <peak> --gt <genome table>
-    # comare with gene body 
+    
+comare with gene body 
+
     compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 1
-    # proportion of peaks against whole genome
+    
+proportion of peaks against whole genome
+
     compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2
 
 #### 3.3. peak_occurance
