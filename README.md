@@ -17,7 +17,7 @@ for CentOS:
 
 #### 2.3. Install 
     git clone https://github.com/rnakato/ChIPseqTools.git
-    git clone https://github.com/rnakato/SSP.git DROMPAplus/src/ChIPseqTools
+    git clone https://github.com/rnakato/SSP.git ChIPseqTools/src/SSP
     cd ChIPseqTools
     make
 
