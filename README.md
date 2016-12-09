@@ -16,8 +16,7 @@ for CentOS:
     sudo yum -y install git gcc-c++ boost-devel
 
 #### 2.3. Install 
-    git clone https://github.com/rnakato/ChIPseqTools.git
-    git clone https://github.com/rnakato/SSP.git ChIPseqTools/src/SSP
+    git clone --recursive https://github.com/rnakato/ChIPseqTools.git
     cd ChIPseqTools
     make
 
