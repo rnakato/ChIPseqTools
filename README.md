@@ -26,8 +26,8 @@ For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp dir
     export PATH = $PATH:$HOME/my_chipseq_exp/ChIPseqTools/bin
 
 #### 2.5 Update
- git pull origin master
- git submodule foreach git pull origin master
+    git pull origin master
+    git submodule foreach git pull origin master
 
 #3. Usage
 
