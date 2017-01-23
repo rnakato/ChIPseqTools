@@ -7,7 +7,7 @@ void mergeArray(std::vector<strRange> &array)
   while (itr != array.end()) {
     auto next = itr+1;
     if(next != array.end() && next->strand == itr->strand &&
-       overlap(itr->start, itr->end, next->start, next->end)) {
+       my_overlap(itr->start, itr->end, next->start, next->end)) {
       next->start = std::min(itr->start, next->start);
       next->end   = std::max(itr->end, next->end);
       itr = array.erase(itr);
