@@ -97,7 +97,7 @@ void merge_tss2bed(const Variables &values, const HashOfGeneDataMap &mp, std::ve
   for (auto x: vbed) d.inc(x.gene.d, x.gene.st);
   d.print();
 
-  BPRINT("# Sites from upstream %1% bp to downstream %2% bp around TSS\n") % updist % downdist;
+  std::cout << boost::format("# Sites from upstream %1% bp to downstream %2% bp around TSS\n") % updist % downdist;
 
   vbed[0].printHead();
   std::cout << "\tfrom TSS\ttranscript name\tgene name\ttranscript id\tgene id\tstrand\ttxStart\ttxEnd" << std::endl;
@@ -132,8 +132,8 @@ void merge_gene2bed(const Variables &values, const HashOfGeneDataMap &mp, std::v
 
   gdist d;
   for (auto x: vbed) d.inc(x.gene.st);
-  BPRINT("# Input sites total: %1%, upstream: %2%, downstream: %3%, genic: %4%, intergenic: %5%") % d.genome % d.up % d.down % d.genic % d.inter;  
-  if(values.count("conv")) BPRINT(", convergent: %1%, divergent: %2%, parallel: %3%\n") % d.conv % d.div % d.par;
+  std::cout << boost::format("# Input sites total: %1%, upstream: %2%, downstream: %3%, genic: %4%, intergenic: %5%") % d.genome % d.up % d.down % d.genic % d.inter;  
+  if(values.count("conv")) std::cout << boost::format(", convergent: %1%, divergent: %2%, parallel: %3%\n") % d.conv % d.div % d.par;
   else std::cout << std::endl;
 
   vbed[0].printHead();
@@ -209,9 +209,9 @@ std::vector<int> makeGenomeArray(const Variables &values, std::string chr, int s
 void print_gdist(const Variables &values, gdist n, std::string str)
 {
   std::cout << str << "\t";
-  if(values.count("intron")) BPRINT("%1%\t%2%\t%3%\t%4%\t%5%\t%6%") % n.genome % n.up % n.down % n.exon % n.intron % n.inter;
-  else BPRINT("%1%\t%2%\t%3%\t%4%\t%5%") % n.genome % n.up % n.genic % n.intron % n.inter;
-  if(values.count("conv")) BPRINT("\t%1%\t%2%\t%3%\n") % n.conv % n.div % n.par;
+  if(values.count("intron")) std::cout << boost::format("%1%\t%2%\t%3%\t%4%\t%5%\t%6%") % n.genome % n.up % n.down % n.exon % n.intron % n.inter;
+  else std::cout << boost::format("%1%\t%2%\t%3%\t%4%\t%5%") % n.genome % n.up % n.genic % n.intron % n.inter;
+  if(values.count("conv")) std::cout << boost::format("\t%1%\t%2%\t%3%\n") % n.conv % n.div % n.par;
   else std::cout << std::endl;
 
   std::cout << str << " (%)\t";

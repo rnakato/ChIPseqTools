@@ -23,7 +23,7 @@ class tssdist {
     else nover100++;
   }
   void print(){
-    BPRINT("# Input sites total: %1%, <1kbp: %2%, 1kbp~5kbp: %3%, 5kbp~10kbp: %4%, 10kbp~100kbp: %5%, 100kbp~: %6%\n") % all % n1 % n5 % n10 % n100 % nover100;
+    std::cout << boost::format("# Input sites total: %1%, <1kbp: %2%, 1kbp~5kbp: %3%, 5kbp~10kbp: %4%, 10kbp~100kbp: %5%, 100kbp~: %6%\n") % all % n1 % n5 % n10 % n100 % nover100;
   }
 };
 
