@@ -3,9 +3,10 @@
 #include <algorithm>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include "SSP/src/readdata.h"
+#include "SSP/common/BedFormat.hpp"
+#include "SSP/common/ReadAnnotation.hpp"
 #include "gene_bed.h"
-#include "SSP/src/macro.h"
+#include "SSP/common/inline.hpp"
 
 using Variables = boost::program_options::variables_map;
 

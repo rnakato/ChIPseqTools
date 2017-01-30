@@ -1,8 +1,13 @@
+/* Copyright(c)  Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>
+ * All rights reserved.
+ */
 #ifndef GENE_BED_H
 #define GENE_BED_H
 
-#include "SSP/src/readdata.h"
 #include <boost/format.hpp>
+#include "SSP/common/ReadAnnotation.hpp"
+#include "SSP/common/GeneAnnotation.hpp"
+#include "SSP/common/BedFormat.hpp"
 
 class tssdist {
  public:
@@ -71,6 +76,13 @@ class gdist {
     }
     return static_cast<double>(n*100)/genome;
   }
+};
+
+class convsite : public bed {
+ public:
+  status st;
+  const genedata *gene;
+ convsite(int32_t s, int32_t e, std::string c, const genedata *pgene): bed(s,e,c), gene(pgene) {}
 };
 
 template <class T>

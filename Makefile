@@ -9,7 +9,9 @@ LIBDIR = ./lib
 BINDIR = ./bin
 SSPDIR = ./src/SSP
 SSPSRCDIR = $(SSPDIR)/src
+SSPCMNDIR = $(SSPDIR)/common
 SSPOBJDIR = $(SSPDIR)/obj
+SSPCMNOBJDIR = $(SSPDIR)/cobj
 ALGLIBDIR = $(SSPSRCDIR)/alglib
 
 PROGRAMS = gtf2refFlat compare_bed2tss peak_occurance multibed2gene compare_bs
@@ -20,7 +22,7 @@ ifdef DEBUG
 CFLAGS += -DDEBUG
 endif
 
-OBJS_UTIL = $(SSPOBJDIR)/readdata.o $(SSPOBJDIR)/util.o
+OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(SSPCMNOBJDIR)/ReadAnnotation.o
 OBJS_GTF = $(OBJDIR)/gtf2refFlat.o
 OBJS_COM = $(OBJDIR)/compare_bed2tss.o $(OBJDIR)/gene_bed.o
 OBJS_PO = $(OBJDIR)/peak_occurance.o $(OBJDIR)/gene_bed.o $(ALGLIBDIR)/libalglib.a
@@ -56,9 +58,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CC) -o $@ -c $< $(CFLAGS) $(WFLAGS)
 
 clean:
-	rm -rf bin obj
+	rm -rf $(BINDIR) $(OBJDIR)
 
-HEADS_UTIL = $(SSPSRCDIR)/util.h $(SSPSRCDIR)/readdata.h $(SSPSRCDIR)/macro.h $(SSPSRCDIR)/seq.h
+HEADS_UTIL = $(SSPCMNDIR)/util.hpp $(SSPCMNDIR)/inline.hpp $(SSPCMNDIR)/seq.hpp
 
 $(OBJS_UTIL): Makefile $(HEADS_UTIL)
 $(OBJS_GTF): Makefile $(HEADS_UTIL)

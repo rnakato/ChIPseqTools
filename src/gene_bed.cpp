@@ -1,5 +1,16 @@
 #include "gene_bed.h"
-#include "SSP/src/macro.h"
+#include "SSP/common/inline.hpp"
+
+namespace {
+class strRange : public bed {
+ public:
+  std::string strand;
+  const genedata *gene;
+ strRange(): bed(), strand(0), gene(0) {}
+ strRange(int32_t s, int32_t e, std::string c, std::string str, const genedata &pgene): bed(s,e,c), strand(str), gene(&pgene) {}
+};
+
+}
 
 void mergeArray(std::vector<strRange> &array)
 {

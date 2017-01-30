@@ -2,7 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <boost/program_options.hpp>
-#include "SSP/src/readdata.h"
+#include "SSP/common/ReadAnnotation.hpp"
 
 using namespace std;
 using namespace boost::program_options;

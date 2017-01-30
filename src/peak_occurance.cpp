@@ -1,5 +1,5 @@
 /* Copyright(c)  Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>
- * This file is a part of DROMPA sources.
+ * All rights reserved.
  */
 #include <algorithm>
 #include <random>
@@ -9,10 +9,9 @@
 #include <boost/accumulators/statistics.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include "SSP/src/readdata.h"
-#include "SSP/src/util.h"
+#include "SSP/common/util.hpp"
 #include "gene_bed.h"
-#include "SSP/src/alglib/alglib.h"
+#include "SSP/common/alglib/alglib.h"
 
 using namespace std;
 using namespace boost::accumulators;
