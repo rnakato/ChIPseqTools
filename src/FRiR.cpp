@@ -16,6 +16,8 @@ class globalopt{
   MyOpt::Opts opt;
   std::string repeatfilename;
   std::string repeattype;
+  std::string output;
+
 public:
   SeqStatsGenome genome;
   LibComp complexity;
@@ -35,9 +37,11 @@ public:
     genome.setValues(values);
     repeatfilename = MyOpt::getVal<std::string>(values, "repeat");
     repeattype     = MyOpt::getVal<std::string>(values, "repeattype");
+    output         = MyOpt::getVal<std::string>(values, "output");
   }
   const std::string & getrepeatfilename() const { return repeatfilename; }
   const std::string & getrepeattype()     const { return repeattype; }
+  const std::string & getoutput()         const { return output; }
 };
 
 void getOpts(globalopt &p, int argc, char* argv[]);
@@ -83,7 +87,6 @@ mapRep read_Repeatfile(const std::string &filename, const std::string &type)
       exit(0);
     }
   }
-  
 
   return Repeat;
 }
@@ -130,16 +133,19 @@ int main(int argc, char* argv[])
   p.complexity.checkRedundantReads(p.genome);
 
   auto Repeat = read_Repeatfile(p.getrepeatfilename(), p.getrepeattype());
+  
+  std::ofstream out(p.getoutput());
 
+  out << "Type\ttotal length\t% genome\tread number\t% genome\tlog10(read/length)" << std::endl;
   for(auto itr = Repeat.begin(); itr != Repeat.end(); ++itr) {
     uint64_t len(0);
     auto nread = countReads(itr->second, p.genome, len);
     double rread(getratio(nread, p.genome.getnread(Strand::BOTH)));
     double rlen(getratio(len, p.genome.getlen()));
-    std::cout << itr->first << "\t"
-	      << nread << "\t" << rread << "\t"
-	      << len   << "\t" << rlen  << "\t"
-	      << log10(getratio(rread, rlen)) << std::endl;
+    out << itr->first << "\t"
+	<< len   << "\t" << rlen  << "\t"
+	<< nread << "\t" << rread << "\t"
+	<< log10(getratio(rread, rlen)) << std::endl;
   }
 
   return 0;
