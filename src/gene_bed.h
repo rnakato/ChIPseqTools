@@ -82,7 +82,7 @@ class convsite : public bed {
  public:
   status st;
   const genedata *gene;
- convsite(int32_t s, int32_t e, std::string c, const genedata *pgene): bed(s,e,c), gene(pgene) {}
+ convsite(const int32_t s, const int32_t e, const std::string &c, const genedata *pgene): bed(c,s,e), gene(pgene) {}
 };
 
 template <class T>

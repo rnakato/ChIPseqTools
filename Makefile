@@ -12,9 +12,9 @@ SSPSRCDIR = $(SSPDIR)/src
 SSPCMNDIR = $(SSPDIR)/common
 SSPOBJDIR = $(SSPDIR)/obj
 SSPCMNOBJDIR = $(SSPDIR)/cobj
-ALGLIBDIR = $(SSPSRCDIR)/alglib
+ALGLIBDIR = $(SSPCMNDIR)/alglib
 
-PROGRAMS = gtf2refFlat compare_bed2tss peak_occurance multibed2gene compare_bs
+PROGRAMS = gtf2refFlat compare_bed2tss peak_occurance multibed2gene compare_bs FRiR
 TARGET = $(addprefix $(BINDIR)/,$(PROGRAMS))
 #$(warning $(TARGET))
 
@@ -27,6 +27,7 @@ OBJS_GTF = $(OBJDIR)/gtf2refFlat.o
 OBJS_COM = $(OBJDIR)/compare_bed2tss.o $(OBJDIR)/gene_bed.o
 OBJS_PO = $(OBJDIR)/peak_occurance.o $(OBJDIR)/gene_bed.o $(ALGLIBDIR)/libalglib.a
 OBJS_MG = $(OBJDIR)/multibed2gene.o $(OBJDIR)/gene_bed.o
+OBJS_FRIR = $(OBJDIR)/FRiR.o $(SSPOBJDIR)/Mapfile.o $(SSPOBJDIR)/LibraryComplexity.o $(SSPOBJDIR)/ParseMapfile.o $(SSPCMNOBJDIR)/BoostOptions.o $(SSPCMNOBJDIR)/util.o $(SSPOBJDIR)/ReadBpStatus.o
 
 .PHONY: all clean
 
@@ -47,6 +48,11 @@ $(BINDIR)/multibed2gene: $(OBJS_MG) $(OBJS_UTIL)
 $(BINDIR)/compare_bs: src/compare_bs.c
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	gcc -o $@ $^ -Wall -W -O3 -lm
+$(BINDIR)/FRiR: $(OBJS_FRIR)
+	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
+	$(CC) -o $@ $^ $(LIBS)
+
+
 
 $(LIBDIR)/libalglib.a:
 	make -C $(ALGLIBDIR)
