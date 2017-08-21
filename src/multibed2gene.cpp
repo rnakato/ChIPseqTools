@@ -102,7 +102,7 @@ void compare_bed(const variables_map &values)
     //    cout << x << endl;
     auto vbed = parseBed<T>(x);
     //    printBed(vbed);
-    vbedlist.push_back(vbed);
+    vbedlist.emplace_back(vbed);
   }
 
   auto merge_bed(vbedlist);
