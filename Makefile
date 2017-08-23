@@ -27,7 +27,7 @@ OBJS_GTF = $(OBJDIR)/gtf2refFlat.o
 OBJS_COM = $(OBJDIR)/compare_bed2tss.o $(OBJDIR)/gene_bed.o
 OBJS_PO = $(OBJDIR)/peak_occurance.o $(OBJDIR)/gene_bed.o $(ALGLIBDIR)/libalglib.a
 OBJS_MG = $(OBJDIR)/multibed2gene.o $(OBJDIR)/gene_bed.o
-OBJS_FRIR = $(OBJDIR)/FRiR.o $(SSPOBJDIR)/Mapfile.o $(SSPOBJDIR)/LibraryComplexity.o $(SSPOBJDIR)/ParseMapfile.o $(SSPCMNOBJDIR)/BoostOptions.o $(SSPCMNOBJDIR)/util.o $(SSPOBJDIR)/ReadBpStatus.o
+OBJS_FRIR = $(OBJDIR)/FRiR.o $(OBJS_SSP) $(SSPOBJDIR)/Mapfile.o $(SSPOBJDIR)/LibraryComplexity.o $(SSPOBJDIR)/ParseMapfile.o $(SSPCMNOBJDIR)/BoostOptions.o $(SSPCMNOBJDIR)/util.o $(SSPOBJDIR)/ReadBpStatus.o 
 
 .PHONY: all clean
 
@@ -53,11 +53,12 @@ $(BINDIR)/FRiR: $(OBJS_FRIR)
 	$(CC) -o $@ $^ $(LIBS)
 
 
-
-$(LIBDIR)/libalglib.a:
-	make -C $(ALGLIBDIR)
+$(ALGLIBDIR)/libalglib.a:
+	$(MAKE) -C $(ALGLIBDIR) libalglib.a
 $(SSPOBJDIR)/%.o: $(SSPSRCDIR)/%.cpp
-	make -C $(SSPDIR)
+	$(MAKE) -C $(SSPDIR) $(OBJDIR)/$(notdir $@)
+$(SSPCMNOBJDIR)/%.o: $(SSPCMNDIR)/%.cpp
+	$(MAKE) -C $(SSPDIR) cobj/$(notdir $@)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
