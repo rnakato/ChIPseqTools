@@ -86,23 +86,23 @@ class convsite : public bed {
 };
 
 template <class T>
-void scanBedGene(T &x, const HashOfGeneDataMap &mp, int updist, int downdist)
+void scanBedGene(T &x, const HashOfGeneDataMap &mp, int32_t updist, int32_t downdist)
 {
-  int summit = x.bed.summit;
+  int32_t summit = x.bed.summit;
 
-  for(auto itr = mp.at(x.bed.chr).begin(); itr != mp.at(x.bed.chr).end(); ++itr) {
-    std::string strand = itr->second.strand;
-    int s = itr->second.txStart;
-    int e = itr->second.txEnd;
+  for(auto &m: mp.at(x.bed.chr)) {
+    std::string strand(m.second.strand);
+    int32_t s(m.second.txStart);
+    int32_t e(m.second.txEnd);
     
     if((strand == "+" && s - updist <= summit && summit <= s) ||
        (strand == "-" && e          <= summit && summit <= e + updist)) {  // upstream
-      x.update(UPSTREAM, itr->second);
+      x.update(UPSTREAM, m.second);
     } else if((strand == "+" && e            <= summit && summit <= e + downdist) ||
 	      (strand == "-" && s - downdist <= summit && summit <= s)) {  // downstream
-      x.update(DOWNSTREAM, itr->second);
+      x.update(DOWNSTREAM, m.second);
     } else if(s <= x.bed.summit && x.bed.summit <= e) {   // genic
-      x.update(GENIC, itr->second);
+      x.update(GENIC, m.second);
     }
   }
   return;

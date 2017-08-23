@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 	<< len   << "\t" << rlen  << "\t"
 	<< nread << "\t" << rread << "\t"
 	<< log10(getratio(rread, rlen)) << std::endl;
-  }
+	}
 
   return 0;
 }
