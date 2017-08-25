@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
   auto tmp = parseGtf(values["gtf"].as<string>()); // hash for transcripts
   auto gmp = construct_gmp(tmp);                   // hash for genes
 
-  //printMap(tmp);
+  //  printMap(tmp);
   //printMap(gmp);
-    
+  
   if (values.count("unique")) printRefFlat(gmp, values.count("name")); 
   else printRefFlat(tmp, values.count("name"));
 
