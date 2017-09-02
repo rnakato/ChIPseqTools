@@ -16,6 +16,8 @@
 using namespace std;
 using namespace boost::accumulators;
 using namespace boost::program_options;
+using GeneDataMap = std::unordered_map<std::string, genedata>;
+using HashOfGeneDataMap = std::unordered_map<std::string, GeneDataMap>;
 
 variables_map argv_init(int argc, char* argv[])
 {
@@ -70,23 +72,23 @@ variables_map argv_init(int argc, char* argv[])
 }
 
 template <class T>
-tssdist func(const variables_map &values, unordered_map<string, unordered_map<string, genedata>> mp, vector<T> vbed){
+tssdist func(const variables_map &values, const HashOfGeneDataMap &mp, vector<T> &vbed)
+{
   for (T &x: vbed) {
     int updist = -values["updist"].as<int>();
     int downdist = values["downdist"].as<int>();
     
     int d, dmin(-1);
-    if(mp.find(x.bed.chr) != mp.end()) {
-      for(auto itr = mp.at(x.bed.chr).begin(); itr != mp.at(x.bed.chr).end(); ++itr) {
-	if(itr->second.strand == "+") d = x.bed.summit - itr->second.txStart;
-	else                          d = itr->second.txEnd - x.bed.summit;
-	
-	if((x.gene.st != TSS && !x.gene.d) || dmin > abs(d)){
+    if (mp.find(x.bed.chr) != mp.end()) {
+      for (auto &p: mp.at(x.bed.chr)) {
+	if (p.second.strand == "+") d = x.bed.summit - p.second.txStart;
+	else                        d = p.second.txEnd - x.bed.summit;
+	if ((x.gene.st != TSS && !x.gene.d) || dmin > abs(d)) {
 	  dmin = abs(d);
 	  x.gene.d = d;
-	  x.gene.gene = &itr->second;
+	  x.gene.gene = &p.second;
 	}
-	if(d > updist && d < downdist) x.gene.st = TSS;
+	if (d > updist && d < downdist) x.gene.st = TSS;
       }
     }
   }
@@ -97,9 +99,7 @@ tssdist func(const variables_map &values, unordered_map<string, unordered_map<st
   return d;
 }
 
-unordered_map<string, unordered_map<string, genedata>>
-					    generate_rand(unordered_map<string, unordered_map<string, genedata>> mp,
-							  vector<string> vgname, int size_emp)
+HashOfGeneDataMap generate_rand(const HashOfGeneDataMap &mp, const vector<string> &vgname, const int size_emp)
 {
   std::random_device random_device;  // 乱数生成器
   std::mt19937 random_engine{random_device()}; // メルセンヌ・ツイスター 32bit
@@ -107,19 +107,19 @@ unordered_map<string, unordered_map<string, genedata>>
 
   vector<string> glist_rand;
   int i(0);
-  while(i<size_emp) {
+  while (i<size_emp) {
     int rand = die_distribution(random_engine);
     string name = vgname[rand];
     int on(0);
-    for(auto x: glist_rand) {
-      if(x == name){
-	on++;
+    for (auto x: glist_rand) {
+      if (x == name) {
+	++on;
 	break;
       }
     }
-    if(!on){
+    if (!on) {
       glist_rand.push_back(name);
-      i++;
+      ++i;
     }
   }
   //  for(auto x: glist_rand) cout << x << endl;
@@ -132,22 +132,20 @@ unordered_map<string, unordered_map<string, genedata>>
 }
 
 template <class T>
-void compare_tss(const variables_map &values,
-		 unordered_map<string, unordered_map<string, genedata>> mp,
-		 vector<T> &vbed, vector<string> glist)
+void compare_tss(const variables_map &values, const HashOfGeneDataMap &mp,
+		 vector<T> &vbed, const vector<string> &glist)
 {
   // genelist
   auto emp = extract_mp(mp, glist);
-  int n_emp = countmp(emp);
+  int32_t n_emp = countmp(emp);
   tssdist d_list = func(values, emp, vbed);
 
   // random
   accumulator_set<double, stats<tag::mean, tag::variance>> vn1, vn5, vn10, vn100, vnover100;
   vector<string> vgname = scanGeneName(mp);
-  int max = values["permutation"].as<int>();
-  cerr << "random permutation: " << endl;
-  for(int i=0; i<max; ++i) {
-    cerr << i << ".." << flush;
+  int32_t max = values["permutation"].as<int>();
+  for (int i=0; i<max; ++i) {
+    std::cerr << boost::format("random permutation: %4d\r") % i << std::flush;
     auto rmp = generate_rand(mp, vgname, n_emp);
     tssdist d_rand = func(values, rmp, vbed);
     vn1(d_rand.n1);
@@ -175,7 +173,7 @@ void compare_tss(const variables_map &values,
 }
 
 template <class T>
-gdist func_gene(const variables_map &values, unordered_map<string, unordered_map<string, genedata>> mp, vector<T> vbed)
+gdist func_gene(const variables_map &values, const HashOfGeneDataMap &mp, vector<T> &vbed)
 {
   int updist = values["updist"].as<int>();
   int downdist = values["downdist"].as<int>();
@@ -200,9 +198,8 @@ gdist func_gene(const variables_map &values, unordered_map<string, unordered_map
 }
 
 template <class T>
-void merge_gene2bed(const variables_map &values,
-		    const unordered_map<string, unordered_map<string, genedata>> &mp,
-		    vector<T> &vbed, vector<string> glist)
+void merge_gene2bed(const variables_map &values, const HashOfGeneDataMap &mp,
+		    vector<T> &vbed, const vector<string> &glist)
 {
   // genelist
   auto emp = extract_mp(mp, glist);
@@ -213,9 +210,8 @@ void merge_gene2bed(const variables_map &values,
   accumulator_set<double, stats<tag::mean, tag::variance>> vup, vdown, vgenic, vinter, vconv, vdiv, vpar;
   vector<string> vgname = scanGeneName(mp);
   int max = values["permutation"].as<int>();
-  cerr << "random permutation: " << endl;
-  for(int i=0; i<max; ++i) {
-    cerr << i << ".." << flush;
+  for (int i=0; i<max; ++i) {
+    std::cerr << boost::format("random permutation: %4d\r") % i << std::flush;
     auto rmp = generate_rand(mp, vgname, n_emp);
     gdist d_rand = func_gene(values, rmp, vbed);
     vup(d_rand.up);
@@ -254,27 +250,27 @@ void merge_gene2bed(const variables_map &values,
 }
 
 template <class T>
-void compare_bed(const variables_map &values, string filename)
+void compare_bed(const variables_map &values, const string &filename)
 {
   auto vbed = parseBed<bed_gene<T>>(filename);
   //  printBed(vbed);
 
-  unordered_map<string, unordered_map<string, genedata>> tmp;
-  if(values.count("refFlat")) tmp = parseRefFlat(values["genefile"].as<string>());
-  else                        tmp = parseGtf(values["genefile"].as<string>());
+  HashOfGeneDataMap tmp;
+  if (values.count("refFlat")) tmp = parseRefFlat(values["genefile"].as<string>());
+  else                         tmp = parseGtf(values["genefile"].as<string>());
   
   //printMap(tmp);
   
   auto glist = readGeneList(values["genelist"].as<string>());
-
   int mode = values["mode"].as<int>();
-  if(values.count("gene")) {
+
+  if (values.count("gene")) {
     auto gmp = construct_gmp(tmp);
-    if(!mode) compare_tss(values, gmp, vbed, glist);
-    else if(mode==1) merge_gene2bed(values, gmp, vbed, glist);
+    if (!mode) compare_tss(values, gmp, vbed, glist);
+    else if (mode==1) merge_gene2bed(values, gmp, vbed, glist);
   } else {
-    if(!mode) compare_tss(values, tmp, vbed, glist);
-    else if(mode==1) merge_gene2bed(values, tmp, vbed, glist);
+    if (!mode) compare_tss(values, tmp, vbed, glist);
+    else if (mode==1) merge_gene2bed(values, tmp, vbed, glist);
   }
   
   return;
@@ -285,9 +281,9 @@ int main(int argc, char* argv[])
   variables_map values = argv_init(argc, argv);
 
   string filename(values["bed"].as<string>());
-  if(values.count("bed12"))        compare_bed<bed12>(values, filename);
-  else if(values.count("macsxls")) compare_bed<macsxls>(values, filename);
-  else                             compare_bed<bed>(values, filename);
+  if (values.count("bed12"))        compare_bed<bed12>(values, filename);
+  else if (values.count("macsxls")) compare_bed<macsxls>(values, filename);
+  else                              compare_bed<bed>(values, filename);
 
   return 0;
 }
