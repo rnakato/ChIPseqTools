@@ -11,7 +11,8 @@
 #include <boost/accumulators/statistics/variance.hpp>
 #include "SSP/common/util.hpp"
 #include "gene_bed.h"
-#include "SSP/common/alglib/alglib.h"
+//#include "SSP/common/alglib/alglib.h"
+#include "SSP/common/statistics.hpp"
 
 using namespace std;
 using namespace boost::accumulators;
@@ -164,11 +165,11 @@ void compare_tss(const variables_map &values, const HashOfGeneDataMap &mp,
   cout << "SD\t" << sqrt(variance(vn1)) << "\t" << sqrt(variance(vn5)) << "\t" << sqrt(variance(vn10)) << "\t" << sqrt(variance(vn100)) << "\t" << sqrt(variance(vnover100)) << endl;
 
   cout << "pvalue\t"
-       << stdNormdist(d_list.n1,       mean(vn1),       sqrt(variance(vn1))) << "\t"
-       << stdNormdist(d_list.n5,       mean(vn5),       sqrt(variance(vn5))) << "\t"
-       << stdNormdist(d_list.n10,      mean(vn10),      sqrt(variance(vn10))) << "\t"
-       << stdNormdist(d_list.n100,     mean(vn100),     sqrt(variance(vn100))) << "\t"
-       << stdNormdist(d_list.nover100, mean(vnover100), sqrt(variance(vnover100))) << endl;
+       << getNormDist(d_list.n1,       mean(vn1),       sqrt(variance(vn1))) << "\t"
+       << getNormDist(d_list.n5,       mean(vn5),       sqrt(variance(vn5))) << "\t"
+       << getNormDist(d_list.n10,      mean(vn10),      sqrt(variance(vn10))) << "\t"
+       << getNormDist(d_list.n100,     mean(vn100),     sqrt(variance(vn100))) << "\t"
+       << getNormDist(d_list.nover100, mean(vnover100), sqrt(variance(vnover100))) << endl;
   return;
 }
 
@@ -235,14 +236,14 @@ void merge_gene2bed(const variables_map &values, const HashOfGeneDataMap &mp,
   if(values.count("conv")) cout << "\t" << sqrt(variance(vconv)) << "\t" << sqrt(variance(vdiv)) << "\t" << sqrt(variance(vpar));
   cout << endl;
   cout << "pvalue\t"
-       << stdNormdist(d_list.up,       mean(vup),      sqrt(variance(vup))) << "\t"
-       << stdNormdist(d_list.down,     mean(vdown),    sqrt(variance(vdown))) << "\t"
-       << stdNormdist(d_list.genic,    mean(vgenic),   sqrt(variance(vgenic))) << "\t"
-       << stdNormdist(d_list.inter,    mean(vinter),   sqrt(variance(vinter)));
+       << getNormDist(d_list.up,       mean(vup),      sqrt(variance(vup))) << "\t"
+       << getNormDist(d_list.down,     mean(vdown),    sqrt(variance(vdown))) << "\t"
+       << getNormDist(d_list.genic,    mean(vgenic),   sqrt(variance(vgenic))) << "\t"
+       << getNormDist(d_list.inter,    mean(vinter),   sqrt(variance(vinter)));
   if(values.count("conv")) {
-    cout << "\t" << stdNormdist(d_list.conv,   mean(vconv),    sqrt(variance(vconv)))
-	 << "\t" << stdNormdist(d_list.div,    mean(vdiv),     sqrt(variance(vdiv)))
-	 << "\t" << stdNormdist(d_list.par,    mean(vpar),     sqrt(variance(vpar)));
+    cout << "\t" << getNormDist(d_list.conv,   mean(vconv),    sqrt(variance(vconv)))
+	 << "\t" << getNormDist(d_list.div,    mean(vdiv),     sqrt(variance(vdiv)))
+	 << "\t" << getNormDist(d_list.par,    mean(vpar),     sqrt(variance(vpar)));
   }
   cout << endl;
 
@@ -276,6 +277,7 @@ void compare_bed(const variables_map &values, const string &filename)
   return;
 }
 
+#include <gsl/gsl_cdf.h>
 int main(int argc, char* argv[])
 {
   variables_map values = argv_init(argc, argv);
