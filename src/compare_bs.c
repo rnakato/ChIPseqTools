@@ -213,10 +213,10 @@ int read_bs(char *filename, struct bs **bsarray, int *bsarraynum, int sp_scer){
   return num;
 }
 
-static void getoverlap(struct peakset *peakset, int sample1, int sample2, int i, int j, int num){
+static void getoverlap(struct peakset *peakset, int sample1, int sample2, int i, int j, int num, int extend_length){
   peakset[sample1].bsarray[i].overlap[sample2]=1;
   copy_bs2bs_overlap(peakset, sample1, sample2, i, j, num);
-  peakset[sample1].base_overlap[sample2] += min(peakset[sample1].bsarray[i].end, peakset[sample2].bsarray[j].end) - max(peakset[sample1].bsarray[i].start, peakset[sample2].bsarray[j].start);
+  peakset[sample1].base_overlap[sample2] += min(peakset[sample1].bsarray[i].end, peakset[sample2].bsarray[j].end) - max(peakset[sample1].bsarray[i].start, peakset[sample2].bsarray[j].start) + extend_length;
 }
 
 static void cnt_overlap(struct peakset *peakset, int sample1, int sample2){
@@ -237,8 +237,8 @@ void compare(struct peakset *peakset, int sample1, int sample2, int extend_lengt
       if(!strcmp(peakset[sample1].bsarray[i].chr, peakset[sample2].bsarray[j].chr) 
 	 && peakset[sample2].bsarray[j].start <= peakset[sample1].bsarray[i].end + extend_length 
 	 && peakset[sample2].bsarray[j].end >= peakset[sample1].bsarray[i].start - extend_length){
-	getoverlap(peakset, sample1, sample2, i, j, num);
-	if(sample1 != sample2) getoverlap(peakset, sample2, sample1, j, i, num);
+	getoverlap(peakset, sample1, sample2, i, j, num, extend_length);
+	if(sample1 != sample2) getoverlap(peakset, sample2, sample1, j, i, num, extend_length);
 	num++;
       }
     }
