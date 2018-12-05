@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 
-int unison, nobs, maxposi, sp_scer;
+int unison, nobs, maxposi, sp_scer, showallcols;
 
 #define MYFREE(p) {if(p){free(p); (p)=NULL;} }
 #define max(a, b) (((a) > (b))?(a) :(b))
@@ -21,6 +21,7 @@ struct elem{
 typedef enum{NONE, UPSTREAM, DOWNSTREAM} updown;
 
 struct bs{
+  char line[12800];
   char chr[128];
   int start;
   int end;
@@ -31,7 +32,6 @@ struct bs{
   int totss;
   updown updown_fromtss;
   int geneid;
-  char line[1024];
 };
 
 struct bs_overlap{
@@ -63,6 +63,7 @@ const char Usage[] =
        -not(default): output unique sites \n\
        -red: output overlapped sites allowing redundancy \n\
        -maxposi: use maxposition \n\
+       -showallcols: show all columns of the first input file \n\
        -nobs: output only numbers \n\n";
 static void argv_init(int argc, char **argv, struct peakset *, int *, int);
 
@@ -191,6 +192,7 @@ int read_bs(char *filename, struct bs **bsarray, int *bsarraynum, int sp_scer){
     if(linenum<3) continue;
     if(strstr(clm[0].str, "num1")) continue;
     if(!strcmp(clm[0].str, "chromosome")) continue;
+
     chrstr = checkchrname(clm[0].str);
     changechr_yeast(bsarray, num, chrstr, sp_scer);
     (*bsarray)[num].start = atoi(clm[1].str);
@@ -250,7 +252,8 @@ void compare(struct peakset *peakset, int sample1, int sample2, int extend_lengt
 }
 
 void print1bs(struct bs *bsarray, int i){
-  printf("chr%s\t%d\t%d\t%d\t%d\t%.2f\t%.2f\n", bsarray[i].chr, bsarray[i].start, bsarray[i].end, bsarray[i].maxposi, bsarray[i].end-bsarray[i].start, bsarray[i].enrich, bsarray[i].maxIP);
+  if(showallcols) printf("%s\n", bsarray[i].line);
+  else printf("chr%s\t%d\t%d\t%d\t%d\t%.2f\t%.2f\n", bsarray[i].chr, bsarray[i].start, bsarray[i].end, bsarray[i].maxposi, bsarray[i].end-bsarray[i].start, bsarray[i].enrich, bsarray[i].maxIP);
 }
 
 void print1bs_overlap(struct bs_overlap *bsarray, struct bs *bs1, struct bs *bs2, int i){
@@ -295,19 +298,19 @@ int main(int argc, char *argv[]){
   if(nobs) exit(0);
 
   if(unison==2){
-    printf("chromosome\tstart\tend\tsummit 1\tsummit 2\tenrich 1\tenrich 2\tintensity 1\tintensity 2\tA (log2(1*2)/2)\tM (log2(1/2))\tdiff of summit\n");
+    if(!showallcols) printf("chromosome\tstart\tend\tsummit 1\tsummit 2\tenrich 1\tenrich 2\tintensity 1\tintensity 2\tA (log2(1*2)/2)\tM (log2(1/2))\tdiff of summit\n");
     for(i=0; i<peakset[0].cnt_overlap_red[1]; i++){
       print1bs_overlap(peakset[0].bsarray_overlap[1], peakset[0].bsarray, peakset[1].bsarray, i);
     }
   }else if(unison==1){
-    printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
+    if(!showallcols) printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
     for(i=0; i<peakset[0].num; i++){
       if(peakset[0].bsarray[i].overlap[1]){
 	print1bs(peakset[0].bsarray, i);
       }
     }
   }else{
-    printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
+    if(!showallcols) printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
     for(i=0; i<peakset[0].num; i++){
       if(!(peakset[0].bsarray[i].overlap[1])) print1bs(peakset[0].bsarray, i);
     }
@@ -331,6 +334,7 @@ static void argv_init(int argc, char **argv, struct peakset *peakset, int *exten
   maxposi=0;
   nobs=0;
   sp_scer=0;
+  showallcols=0;
   for(i=0; i<samplenum; i++){
     peakset[i].file = NULL;
     peakset[i].num = 0;
@@ -357,6 +361,7 @@ static void argv_init(int argc, char **argv, struct peakset *peakset, int *exten
     else if(!strcmp(argv[i], "-maxposi"))   maxposi=1;
     else if(!strcmp(argv[i], "-scer"))      sp_scer=1;
     else if(!strcmp(argv[i], "-nobs"))      nobs=1;
+    else if(!strcmp(argv[i], "-showallcols"))      showallcols=1;
     else goto err;
   }
   if(!(peakset[0].file) || !(peakset[1].file)) goto err;
