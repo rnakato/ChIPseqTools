@@ -1,10 +1,10 @@
 # ChIPseqTools
 
-#1. Overview
+# 1. Overview
 This repository contains several utility tools mainly for ChIP-seq analysis.
 These programs are written in C++ using [Boost library](http://www.boost.org/).
 
-#2. Install
+# 2. Install
 
 #### 2.1. Install required libraries
 for Ubuntu:
@@ -29,7 +29,7 @@ For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp dir
     git pull origin master
     git submodule foreach git pull origin master
 
-#3. Usage
+# 3. Usage
 
 #### 3.1. gtf2refFlat
 
