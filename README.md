@@ -79,12 +79,32 @@ proportion of peaks against whole genome (distinguish exon and instron)
 
 #### 3.3. compare_bed2loop
 
+    Usage: compare_bed2loop [option] --bed1 <1st bed> --bed2 <2nd bed> --loop <loop file> -o <output> -gt <genome_table>
+    Options:
+       --bed1 arg               1st bed file
+       --bed2 arg               2nd bed file
+       --loop arg               Loop file
+       -l [ --length ] arg (=0) Extend length for overlap 
+       --gt arg                 Genome table (tab-delimited file describing the name
+                                and length of each chromosome)
+       --nobs                   do not output the overlapped loop list
+       --hiccups                HICCups format as input (default: Mango)
+       -h [ --help ]            print this message
+
+
 #### 3.4. peak_occurance
 
 #### 3.5. multibed2gene
 
 #### 3.6. mergebed2CRM
+   
+      mergebed2CRM -i <bs file> -name <name> [-i <bs file> -name <name> ...]
+         -l: extend length (default:0) 
+         -n: number of peaks for clustering (default:3000, setting 0 means use all peaks) 
+         -qnt: quantitative analysis 
 
-#### 3.6. multibed2gene
+#### 3.6. FRiR
+Repeat analysis.
 
-#### 3.7 FRiR
+       FRiR [option] -r <repeatfile> -i <inputfile> -o <output> --gt <genome_table>
+
