@@ -1,15 +1,15 @@
 # ChIPseqTools
 
 # 1. Overview
-This repository contains several utility tools mainly for ChIP-seq analysis.
-These programs are written in C++ using [Boost library](http://www.boost.org/).
+This repository contains several utility tools for ChIP-seq and other epigenome analysis.
+These programs are written in ANCI C and C++11 using [Boost library](http://www.boost.org/).
 
 # 2. Install
 
 #### 2.1. Install required libraries
 for Ubuntu:
 
-    sudo apt-get install git build-essential libboost-all-dev
+    sudo apt install git build-essential libboost-all-dev
  
 for CentOS:
 
@@ -21,9 +21,9 @@ for CentOS:
     make
 
 #### 2.4. Add the PATH environment variable
-For example, if you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp directory, type:
+If you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp directory, type:
 
-    export PATH = $PATH:$HOME/my_chipseq_exp/ChIPseqTools/bin
+    export PATH = $PATH:(PATH_TO_ChIPseqTools)/ChIPseqTools/bin
 
 #### 2.5 (Optional) Update repository
     git pull origin master
@@ -77,6 +77,14 @@ proportion of peaks against whole genome (distinguish exon and instron)
 
     compare_bed2tss -g <gtf> -b <peak> --gt <genome table> --mode 2 --intron
 
-#### 3.3. peak_occurance
+#### 3.3. compare_bed2loop
 
-#### 3.4. multibed2gene
+#### 3.4. peak_occurance
+
+#### 3.5. multibed2gene
+
+#### 3.6. mergebed2CRM
+
+#### 3.6. multibed2gene
+
+#### 3.7 FRiR
