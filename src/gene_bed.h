@@ -48,30 +48,30 @@ class gdist {
   void inc(const int val) {
     genome++;
     switch(val) {
-    case CONVERGENT: conv++;   break;
-    case DIVERGENT:  div++;    break;
-    case PARALLEL:   par++;    break;
-    case UPSTREAM:   up++;     break;
-    case DOWNSTREAM: down++;   break;
-    case GENIC:      genic++;  break;
-    case EXON:       exon++;   break;
-    case INTRON:     intron++; break;
-    case INTERGENIC: inter++;  break;
+    case CONVERGENT: ++conv;   break;
+    case DIVERGENT:  ++div;    break;
+    case PARALLEL:   ++par;    break;
+    case UPSTREAM:   ++up;     break;
+    case DOWNSTREAM: ++down;   break;
+    case GENIC:      ++genic;  break;
+    case EXON:       ++exon;   break;
+    case INTRON:     ++intron; break;
+    case INTERGENIC: ++inter;  break;
     default: break;
     }
   }
   double ratio(const int val) {
     long n;
     switch(val) {
-    case CONVERGENT: n=conv;   break;
-    case DIVERGENT:  n=div;    break;
-    case PARALLEL:   n=par;    break;
-    case UPSTREAM:   n=up;     break;
-    case DOWNSTREAM: n=down;   break;
-    case GENIC:      n=genic;  break;
-    case EXON:       n=exon;   break;
-    case INTRON:     n=intron; break;
-    case INTERGENIC: n=inter;  break;
+    case CONVERGENT: n = conv;   break;
+    case DIVERGENT:  n = div;    break;
+    case PARALLEL:   n = par;    break;
+    case UPSTREAM:   n = up;     break;
+    case DOWNSTREAM: n = down;   break;
+    case GENIC:      n = genic;  break;
+    case EXON:       n = exon;   break;
+    case INTRON:     n = intron; break;
+    case INTERGENIC: n = inter;  break;
     default: break;
     }
     return static_cast<double>(n*100)/genome;
@@ -94,7 +94,7 @@ void scanBedGene(T &x, const HashOfGeneDataMap &mp, int32_t updist, int32_t down
     std::string strand(m.second.strand);
     int32_t s(m.second.txStart);
     int32_t e(m.second.txEnd);
-    
+
     if((strand == "+" && s - updist <= summit && summit <= s) ||
        (strand == "-" && e          <= summit && summit <= e + updist)) {  // upstream
       x.update(UPSTREAM, m.second);
