@@ -16,7 +16,7 @@ variables_map argv_init(int argc, char* argv[])
     ("unique,u", "Only output one transcript per one gene (default: all transcripts)")
     ("help,h", "Print this message")
     ;
-  
+
   variables_map values;
   if (argc==1) {
     cout << "\n" << allopts << endl;
@@ -25,7 +25,7 @@ variables_map argv_init(int argc, char* argv[])
   try {
     parsed_options parsed = parse_command_line(argc, argv, allopts);
     store(parsed, values);
-    
+
     if (values.count("help")) {
       cout << "\n" << allopts << endl;
       exit(0);
@@ -55,8 +55,8 @@ int main(int argc, char* argv[])
 
   //  printMap(tmp);
   //printMap(gmp);
-  
-  if (values.count("unique")) printRefFlat(gmp, values.count("name")); 
+
+  if (values.count("unique")) printRefFlat(gmp, values.count("name"));
   else printRefFlat(tmp, values.count("name"));
 
   return 0;
