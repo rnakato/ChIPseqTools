@@ -11,7 +11,6 @@
 #include <boost/accumulators/statistics/variance.hpp>
 #include "SSP/common/util.hpp"
 #include "gene_bed.h"
-//#include "SSP/common/alglib/alglib.h"
 #include "SSP/common/statistics.hpp"
 
 using namespace std;
@@ -40,9 +39,9 @@ variables_map argv_init(int argc, char* argv[])
     ("gene",      "Gene-level comparison (default: transcript-level)")
     ("help,h", "print this message")
     ;
-  
+
   variables_map values;
-  
+
   if (argc==1) {
     cout << "\n" << allopts << endl;
     exit(0);
@@ -50,12 +49,11 @@ variables_map argv_init(int argc, char* argv[])
   try {
     parsed_options parsed = parse_command_line(argc, argv, allopts);
     store(parsed, values);
-    
+
     if (values.count("help")) {
       cout << "\n" << allopts << endl;
       exit(0);
     }
-    vector<string> opts = {};
     for (auto x: {"genefile", "bed", "genelist"}) {
       if (!values.count(x)) {
 	cerr << "specify --" << x << " option." << endl;
@@ -78,7 +76,7 @@ tssdist func(const variables_map &values, const HashOfGeneDataMap &mp, vector<T>
   for (T &x: vbed) {
     int updist = -values["updist"].as<int>();
     int downdist = values["downdist"].as<int>();
-    
+
     int d, dmin(-1);
     if (mp.find(x.bed.chr) != mp.end()) {
       for (auto &p: mp.at(x.bed.chr)) {
@@ -93,10 +91,10 @@ tssdist func(const variables_map &values, const HashOfGeneDataMap &mp, vector<T>
       }
     }
   }
-  
+
   tssdist d;
   for (auto x: vbed) d.inc(x.gene.d, x.gene.st);
-  
+
   return d;
 }
 
@@ -158,7 +156,7 @@ void compare_tss(const variables_map &values, const HashOfGeneDataMap &mp,
   }
   cerr << "done." << endl;
   //  d_list.print();
-  cout << "gene num: " << n_emp << endl;  
+  cout << "gene num: " << n_emp << endl;
   cout << "\t<1k\t1k~5k\t5k~10k\t10k~100k\t100k~"  << endl;
   cout << "list\t" << d_list.n1 << "\t" << d_list.n5 << "\t" << d_list.n10 << "\t" << d_list.n100 << "\t" << d_list.nover100 << endl;
   cout << "mean\t" << mean(vn1) << "\t" << mean(vn5) << "\t" << mean(vn10) << "\t" << mean(vn100) << "\t" << mean(vnover100) << endl;
@@ -178,23 +176,23 @@ gdist func_gene(const variables_map &values, const HashOfGeneDataMap &mp, vector
 {
   int updist = values["updist"].as<int>();
   int downdist = values["downdist"].as<int>();
-  
+
   vector<convsite> vconv;
   if(values.count("conv")) vconv = gen_convergent(values["limconv"].as<int>(), mp);
-  
+
   for (T &x: vbed) {
     if(mp.find(x.bed.chr) == mp.end()) continue;
-    
+
     int on=0;
     if(values.count("conv")) on = scanBedConv(x, vconv);
     if(on) continue;
-    
+
     scanBedGene(x, mp, updist, downdist);
   }
-  
+
   gdist d;
   for (auto x: vbed) d.inc(x.gene.st);
-  
+
   return d;
 }
 
@@ -221,7 +219,7 @@ void merge_gene2bed(const variables_map &values, const HashOfGeneDataMap &mp,
     vinter(d_rand.inter);
   }
   cerr << "done." << endl;
-  
+
   cout << "gene num: " << n_emp << ", peak num: " << d_list.genome << endl;
   cout << "\tupstream\tdownstream\tgenic\tintergenic";
   if(values.count("conv")) cout << "\tconvergent\tdivergent\tparallel";
@@ -259,9 +257,9 @@ void compare_bed(const variables_map &values, const string &filename)
   HashOfGeneDataMap tmp;
   if (values.count("refFlat")) tmp = parseRefFlat(values["genefile"].as<string>());
   else                         tmp = parseGtf(values["genefile"].as<string>());
-  
+
   //printMap(tmp);
-  
+
   auto glist = readGeneList(values["genelist"].as<string>());
   int mode = values["mode"].as<int>();
 
@@ -273,7 +271,7 @@ void compare_bed(const variables_map &values, const string &filename)
     if (!mode) compare_tss(values, tmp, vbed, glist);
     else if (mode==1) merge_gene2bed(values, tmp, vbed, glist);
   }
-  
+
   return;
 }
 
@@ -289,4 +287,3 @@ int main(int argc, char* argv[])
 
   return 0;
 }
-

@@ -17,7 +17,7 @@ SSPOBJDIR = $(SSPDIR)/obj
 SSPCMNOBJDIR = $(SSPDIR)/cobj
 ALGLIBDIR = $(SSPCMNDIR)/alglib
 
-PROGRAMS = compare_bed2loop gtf2refFlat compare_bed2tss peak_occurance multibed2gene FRiR compare_bs mergebed2CRM
+PROGRAMS = compare_bed2loop gtf2refFlat parseChIADropReadList compare_bed2tss peak_occurance multibed2gene FRiR compare_bs mergebed2CRM
 TARGET = $(addprefix $(BINDIR)/,$(PROGRAMS))
 #$(warning $(TARGET))
 
@@ -27,6 +27,7 @@ endif
 
 OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(SSPCMNOBJDIR)/ReadAnnotation.o
 OBJS_GTF  = $(OBJDIR)/gtf2refFlat.o
+OBJS_PCD  = $(OBJDIR)/parseChIADropReadList.o
 OBJS_LOOP = $(OBJDIR)/compare_bed2loop.o $(OBJDIR)/gene_bed.o
 OBJS_COM  = $(OBJDIR)/compare_bed2tss.o $(OBJDIR)/gene_bed.o
 OBJS_PO   = $(OBJDIR)/peak_occurance.o $(OBJDIR)/gene_bed.o $(SSPCMNOBJDIR)/statistics.o
@@ -41,6 +42,9 @@ OBJS_CRM = $(OBJ_CDIR)/mergebed2CRM.o $(OBJS_C_UTIL)
 all: $(TARGET)
 
 $(BINDIR)/gtf2refFlat: $(OBJS_GTF) $(OBJS_UTIL)
+	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
+	$(CC) -o $@ $^ $(LIBS)
+$(BINDIR)/parseChIADropReadList: $(OBJS_PCD) $(OBJS_UTIL)
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	$(CC) -o $@ $^ $(LIBS)
 $(BINDIR)/compare_bed2loop: $(OBJS_LOOP) $(OBJS_UTIL)
