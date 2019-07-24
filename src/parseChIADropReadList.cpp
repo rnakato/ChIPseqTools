@@ -91,11 +91,17 @@ int main(int argc, char* argv[])
     if(nbed == 1) continue;
     for (int32_t i=0; i<nbed; ++i) {
       for (int32_t j=i+1; j<nbed; ++j) {
-	std::cout << pair.first << "\t"
-		  << pair.second[i].chr   << "\t"
-		  << pair.second[i].start << "\t"
-		  << pair.second[j].chr   << "\t"
-		  << pair.second[j].start << std::endl;
+	printf("%s\t%s\t%d\t%s\t%d\n",
+	       pair.first.c_str(),
+	       pair.second[i].chr.c_str(),
+	       pair.second[i].start,
+	       pair.second[j].chr.c_str(),
+	       pair.second[j].start);
+//	std::cout << pair.first << "\t"
+//		  << pair.second[i].chr   << "\t"
+//		  << pair.second[i].start << "\t"
+//		  << pair.second[j].chr   << "\t"
+//		  << pair.second[j].start << std::endl;
       }
     }
   }
