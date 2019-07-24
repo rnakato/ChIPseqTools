@@ -2,52 +2,54 @@
  * All rights reserved.
  */
 #include <boost/program_options.hpp>
+#include <unordered_map>
 #include "SSP/common/BedFormat.hpp"
 
-using namespace std;
-using namespace boost::program_options;
+using Variables = boost::program_options::variables_map;
 
-variables_map argv_init(int argc, char* argv[])
+Variables argv_init(int argc, char* argv[])
 {
-  options_description allopts("Options");
+  boost::program_options::options_description allopts("Options");
   allopts.add_options()
-    ("bed,b",      value<string>(), "Bed file")
+    ("bed,b",  boost::program_options::value<std::string>(), "Bed file")
     ("help,h", "print this message")
     ;
 
-  variables_map values;
+  Variables values;
 
   if (argc==1) {
-    cout << "\n" << allopts << endl;
+    std::cout << "\n" << allopts << std::endl;
     exit(0);
   }
   try {
-    parsed_options parsed = parse_command_line(argc, argv, allopts);
+    boost::program_options::parsed_options parsed = parse_command_line(argc, argv, allopts);
     store(parsed, values);
 
     if (values.count("help")) {
-      cout << "\n" << allopts << endl;
+      std::cout << "\n" << allopts << std::endl;
       exit(0);
     }
     for (auto x: {"bed"}) {
       if (!values.count(x)) {
-	cerr << "specify --" << x << " option." << endl;
+	std::cerr << "specify --" << x << " option." << std::endl;
 	exit(0);
       }
     }
     notify(values);
 
-  } catch (exception &e) {
-    cout << e.what() << endl;
+  } catch (std::exception &e) {
+    std::cout << e.what() << std::endl;
     exit(0);
   }
   return values;
 }
 
-template <class T>
-std::vector<T> parse_readlist(const std::string &fileName)
+using vBedMap = std::unordered_map<std::string, std::vector<bed>>;
+
+vBedMap parse_readlist(const std::string &fileName)
 {
-  std::vector<T> vbed;
+  vBedMap mp;
+//  std::vector<T> vbed;
   std::ifstream in(fileName);
   if(!in) {
     std::cerr << "Error: BED file " << fileName << " does not exist." << std::endl;
@@ -62,19 +64,32 @@ std::vector<T> parse_readlist(const std::string &fileName)
     std::vector<std::string> v;
     ParseLine(v, lineStr, ',');
 
-    vbed.emplace_back(v);
+    mp[v[0]].emplace_back(v[1], stoi(v[2]), stoi(v[2]));
   }
 
-  return vbed;
+  return mp;
 }
 
 int main(int argc, char* argv[])
 {
-  variables_map values = argv_init(argc, argv);
+  Variables values = argv_init(argc, argv);
 
-  string filename(values["bed"].as<string>());
-  std::cout << filename << std::endl;
-  std::vector<bed> vbed = parse_readlist<bed>(filename);
+  std::string filename(values["bed"].as<std::string>());
+  vBedMap mp = parse_readlist(filename);
+
+  for(auto &pair: mp) {
+    int32_t nbed(pair.second.size());
+    if(nbed == 1) continue;
+    for (int32_t i=0; i<nbed; ++i) {
+      for (int32_t j=i+1; j<nbed; ++j) {
+	std::cout << pair.first << "\t"
+		  << "chr" << pair.second[i].chr << "\t"
+		  << pair.second[i].start  << "\t"
+		  << "chr" << pair.second[j].chr << "\t"
+		  << pair.second[j].start  << std::endl;
+      }
+    }
+  }
 
   return 0;
 }
