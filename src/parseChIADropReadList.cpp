@@ -5,7 +5,19 @@
 #include <unordered_map>
 #include "SSP/common/BedFormat.hpp"
 
+class posi {
+ public:
+  std::string chr;
+  int32_t start;
+ posi(): start(0) {}
+  virtual ~posi(){}
+  posi(const std::string &c, const std::string &s):
+    chr(c), start(stoi(s))
+  {}
+};
+
 using Variables = boost::program_options::variables_map;
+using vBedMap = std::unordered_map<std::string, std::vector<posi>>;
 
 Variables argv_init(int argc, char* argv[])
 {
@@ -44,12 +56,9 @@ Variables argv_init(int argc, char* argv[])
   return values;
 }
 
-using vBedMap = std::unordered_map<std::string, std::vector<bed>>;
-
 vBedMap parse_readlist(const std::string &fileName)
 {
   vBedMap mp;
-//  std::vector<T> vbed;
   std::ifstream in(fileName);
   if(!in) {
     std::cerr << "Error: BED file " << fileName << " does not exist." << std::endl;
@@ -64,7 +73,7 @@ vBedMap parse_readlist(const std::string &fileName)
     std::vector<std::string> v;
     ParseLine(v, lineStr, ',');
 
-    mp[v[0]].emplace_back(v[1], stoi(v[2]), stoi(v[2]));
+    mp[v[0]].emplace_back(v[1], v[2]);
   }
 
   return mp;
@@ -83,10 +92,10 @@ int main(int argc, char* argv[])
     for (int32_t i=0; i<nbed; ++i) {
       for (int32_t j=i+1; j<nbed; ++j) {
 	std::cout << pair.first << "\t"
-		  << "chr" << pair.second[i].chr << "\t"
-		  << pair.second[i].start  << "\t"
-		  << "chr" << pair.second[j].chr << "\t"
-		  << pair.second[j].start  << std::endl;
+		  << pair.second[i].chr   << "\t"
+		  << pair.second[i].start << "\t"
+		  << pair.second[j].chr   << "\t"
+		  << pair.second[j].start << std::endl;
       }
     }
   }
