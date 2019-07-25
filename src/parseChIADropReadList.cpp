@@ -1,9 +1,11 @@
 /* Copyright(c)  Ryuichiro Nakato <rnakato@iam.u-tokyo.ac.jp>
  * All rights reserved.
  */
+#include <iostream>
+#include <fstream>
 #include <boost/program_options.hpp>
 #include <unordered_map>
-#include "SSP/common/BedFormat.hpp"
+#include "SSP/common/util.hpp"
 
 class posi {
  public:
@@ -12,8 +14,14 @@ class posi {
  posi(): start(0) {}
   virtual ~posi(){}
   posi(const std::string &c, const std::string &s):
-    chr(c), start(stoi(s))
+    chr(rmchr(c)), start(stoi(s))
   {}
+  bool operator<(const posi &another) const
+  {
+    if (compare_chr(chr, another.chr) < 0) return 1;
+    else if (compare_chr(chr, another.chr) == 0 && start < another.start) return 1;
+    else return 0;
+  };
 };
 
 using Variables = boost::program_options::variables_map;
@@ -24,6 +32,7 @@ Variables argv_init(int argc, char* argv[])
   boost::program_options::options_description allopts("Options");
   allopts.add_options()
     ("bed,b",  boost::program_options::value<std::string>(), "Bed file")
+    ("intra",  "output intrachromosomal pairs only")
     ("help,h", "print this message")
     ;
 
@@ -89,19 +98,20 @@ int main(int argc, char* argv[])
   for(auto &pair: mp) {
     int32_t nbed(pair.second.size());
     if(nbed == 1) continue;
+
+    // sort posi vector
+    std::sort(pair.second.begin(), pair.second.end());
+
     for (int32_t i=0; i<nbed; ++i) {
       for (int32_t j=i+1; j<nbed; ++j) {
-	printf("%s\t%s\t%d\t%s\t%d\n",
+	if (values.count("intra") && pair.second[i].chr != pair.second[j].chr) continue;
+
+	printf("%s\tchr%s\t%d\tchr%s\t%d\t.\t.\n",
 	       pair.first.c_str(),
 	       pair.second[i].chr.c_str(),
 	       pair.second[i].start,
 	       pair.second[j].chr.c_str(),
 	       pair.second[j].start);
-//	std::cout << pair.first << "\t"
-//		  << pair.second[i].chr   << "\t"
-//		  << pair.second[i].start << "\t"
-//		  << pair.second[j].chr   << "\t"
-//		  << pair.second[j].start << std::endl;
       }
     }
   }
