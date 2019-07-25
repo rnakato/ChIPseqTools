@@ -24,8 +24,38 @@ class posi {
   };
 };
 
+class readpair {
+ public:
+  std::string barcode;
+//  std::string chr1, chr2;
+  int32_t p1, p2;
+ readpair(): p1(0), p2(0) {}
+  virtual ~readpair(){}
+  readpair(const std::string &_barcode, const posi &posi1, const posi &posi2):
+//    barcode(_barcode), chr1(posi1.chr), chr2(posi2.chr), p1(posi1.start), p2(posi2.start)
+    barcode(_barcode), p1(posi1.start), p2(posi2.start)
+  {}
+
+  bool operator<(const readpair &another) const
+  {
+    if (p1 < another.p1) return 1;
+    else if (p1 == another.p1 && p2 < another.p2) return 1;
+    else return 0;
+  };
+/*  bool operator<(const readpair &another) const
+  {
+    if (compare_chr(chr1, another.chr1) < 0) return 1;
+    else if (compare_chr(chr2, another.chr2) < 0) return 1;
+    else if (compare_chr(chr1, another.chr1) > 0 || compare_chr(chr1, another.chr1) > 0) return 0;
+    else if (p1 < another.p1) return 1;
+    else return 0;
+  };*/
+};
+
 using Variables = boost::program_options::variables_map;
 using vBedMap = std::unordered_map<std::string, std::vector<posi>>;
+using ChrPair = std::unordered_map<std::string, std::vector<readpair>>;
+using MpPair = std::unordered_map<std::string, ChrPair>;
 
 Variables argv_init(int argc, char* argv[])
 {
@@ -88,12 +118,15 @@ vBedMap parse_readlist(const std::string &fileName)
   return mp;
 }
 
+
 int main(int argc, char* argv[])
 {
   Variables values = argv_init(argc, argv);
 
   std::string filename(values["bed"].as<std::string>());
   vBedMap mp = parse_readlist(filename);
+
+  MpPair mppair;
 
   for(auto &pair: mp) {
     int32_t nbed(pair.second.size());
@@ -105,13 +138,23 @@ int main(int argc, char* argv[])
     for (int32_t i=0; i<nbed; ++i) {
       for (int32_t j=i+1; j<nbed; ++j) {
 	if (values.count("intra") && pair.second[i].chr != pair.second[j].chr) continue;
+//	vpair.emplace_back(pair.first, pair.second[i], pair.second[j]);
+	mppair[pair.second[i].chr][pair.second[j].chr].emplace_back(pair.first, pair.second[i], pair.second[j]);
+      }
+    }
+  }
 
+  std::vector<std::string> chrlist = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X", "Y", "M"};
+
+  for(auto &x: chrlist) {
+    if (mppair.count(x) == 0) continue;
+    for(auto &y: chrlist) {
+      if (mppair.at(x).count(y) == 0) continue;
+      std::vector<readpair> vp(mppair.at(x).at(y));
+      std::sort(vp.begin(), vp.end());
+      for(auto &z: vp) {
 	printf("%s\tchr%s\t%d\tchr%s\t%d\t.\t.\n",
-	       pair.first.c_str(),
-	       pair.second[i].chr.c_str(),
-	       pair.second[i].start,
-	       pair.second[j].chr.c_str(),
-	       pair.second[j].start);
+	       z.barcode.c_str(), x.c_str(), z.p1, y.c_str(), z.p2);
       }
     }
   }
