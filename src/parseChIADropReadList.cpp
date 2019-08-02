@@ -36,8 +36,7 @@ class readpair {
     barcode(_barcode), p1(posi1.start), p2(posi2.start)
   {}
 
-  bool operator<(const readpair &another) const
-  {
+  bool operator<(const readpair &another) const {
     if (p1 < another.p1) return 1;
     else if (p1 == another.p1 && p2 < another.p2) return 1;
     else return 0;
