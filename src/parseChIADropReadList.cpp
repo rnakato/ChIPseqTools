@@ -41,14 +41,6 @@ class readpair {
     else if (p1 == another.p1 && p2 < another.p2) return 1;
     else return 0;
   };
-/*  bool operator<(const readpair &another) const
-  {
-    if (compare_chr(chr1, another.chr1) < 0) return 1;
-    else if (compare_chr(chr2, another.chr2) < 0) return 1;
-    else if (compare_chr(chr1, another.chr1) > 0 || compare_chr(chr1, another.chr1) > 0) return 0;
-    else if (p1 < another.p1) return 1;
-    else return 0;
-  };*/
 };
 
 using Variables = boost::program_options::variables_map;
@@ -62,6 +54,8 @@ Variables argv_init(int argc, char* argv[])
   allopts.add_options()
     ("bed,b",  boost::program_options::value<std::string>(), "Bed file")
     ("intra",  "output intrachromosomal pairs only")
+    ("full",   "output all read (default: singletons are omitted)")
+    ("juicer", "output juicer format")
     ("help,h", "print this message")
     ;
 
@@ -113,10 +107,8 @@ vBedMap parse_readlist(const std::string &fileName)
 
     mp[v[0]].emplace_back(v[1], v[2]);
   }
-
   return mp;
 }
-
 
 int main(int argc, char* argv[])
 {
@@ -124,6 +116,20 @@ int main(int argc, char* argv[])
 
   std::string filename(values["bed"].as<std::string>());
   vBedMap mp = parse_readlist(filename);
+
+  if (!values.count("juicer")) {
+    for(auto &x: mp) {
+      if (!values.count("full") && x.second.size() == 1) continue;
+
+      printf("%s", x.first.c_str());
+      for(auto &y: x.second) {
+	  printf("\tchr%s\t%d",
+		 y.chr.c_str(), y.start);
+      }
+      printf("\n");
+    }
+    exit(0);
+  }
 
   MpPair mppair;
 
@@ -137,7 +143,6 @@ int main(int argc, char* argv[])
     for (int32_t i=0; i<nbed; ++i) {
       for (int32_t j=i+1; j<nbed; ++j) {
 	if (values.count("intra") && pair.second[i].chr != pair.second[j].chr) continue;
-//	vpair.emplace_back(pair.first, pair.second[i], pair.second[j]);
 	mppair[pair.second[i].chr][pair.second[j].chr].emplace_back(pair.first, pair.second[i], pair.second[j]);
       }
     }
