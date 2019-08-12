@@ -6,33 +6,15 @@
 #include <boost/program_options.hpp>
 #include <unordered_map>
 #include "SSP/common/util.hpp"
-
-class posi {
- public:
-  std::string chr;
-  int32_t start;
- posi(): start(0) {}
-  virtual ~posi(){}
-  posi(const std::string &c, const std::string &s):
-    chr(rmchr(c)), start(stoi(s))
-  {}
-  bool operator<(const posi &another) const
-  {
-    if (compare_chr(chr, another.chr) < 0) return 1;
-    else if (compare_chr(chr, another.chr) == 0 && start < another.start) return 1;
-    else return 0;
-  };
-};
+#include "SSP/common/BedFormat.hpp"
 
 class readpair {
  public:
   std::string barcode;
-//  std::string chr1, chr2;
   int32_t p1, p2;
  readpair(): p1(0), p2(0) {}
   virtual ~readpair(){}
-  readpair(const std::string &_barcode, const posi &posi1, const posi &posi2):
-//    barcode(_barcode), chr1(posi1.chr), chr2(posi2.chr), p1(posi1.start), p2(posi2.start)
+  readpair(const std::string &_barcode, const GenomePosition &posi1, const GenomePosition &posi2):
     barcode(_barcode), p1(posi1.start), p2(posi2.start)
   {}
 
@@ -44,7 +26,7 @@ class readpair {
 };
 
 using Variables = boost::program_options::variables_map;
-using vBedMap = std::unordered_map<std::string, std::vector<posi>>;
+using vBedMap = std::unordered_map<std::string, std::vector<GenomePosition>>;
 using ChrPair = std::unordered_map<std::string, std::vector<readpair>>;
 using MpPair = std::unordered_map<std::string, ChrPair>;
 
@@ -54,7 +36,6 @@ Variables argv_init(int argc, char* argv[])
   allopts.add_options()
     ("bed,b",  boost::program_options::value<std::string>(), "Bed file")
     ("intra",  "output intrachromosomal pairs only")
-    ("full",   "output all read (default: singletons are omitted)")
     ("juicer", "output juicer format")
     ("help,h", "print this message")
     ;
@@ -117,20 +98,6 @@ int main(int argc, char* argv[])
   std::string filename(values["bed"].as<std::string>());
   vBedMap mp = parse_readlist(filename);
 
-  if (!values.count("juicer")) {
-    for(auto &x: mp) {
-      if (!values.count("full") && x.second.size() == 1) continue;
-
-      printf("%s", x.first.c_str());
-      for(auto &y: x.second) {
-	  printf("\tchr%s\t%d",
-		 y.chr.c_str(), y.start);
-      }
-      printf("\n");
-    }
-    exit(0);
-  }
-
   MpPair mppair;
 
   for(auto &pair: mp) {
@@ -154,11 +121,18 @@ int main(int argc, char* argv[])
     if (mppair.count(x) == 0) continue;
     for(auto &y: chrlist) {
       if (mppair.at(x).count(y) == 0) continue;
-      std::vector<readpair> vp(mppair.at(x).at(y));
-      std::sort(vp.begin(), vp.end());
-      for(auto &z: vp) {
-	printf("%s\tchr%s\t%d\tchr%s\t%d\t.\t.\n",
-	       z.barcode.c_str(), x.c_str(), z.p1, y.c_str(), z.p2);
+      if (!values.count("juicer")) {
+	for(auto &z: mppair.at(x).at(y)) {
+	  printf("%s\tchr%s\t%d\tchr%s\t%d\n",
+		 z.barcode.c_str(), x.c_str(), z.p1, y.c_str(), z.p2);
+	}
+      } else {
+	std::vector<readpair> vp(mppair.at(x).at(y));
+	std::sort(vp.begin(), vp.end());
+	for(auto &z: vp) {
+	  printf("%s\tchr%s\t%d\tchr%s\t%d\t.\t.\n",
+		 z.barcode.c_str(), x.c_str(), z.p1, y.c_str(), z.p2);
+	}
       }
     }
   }
