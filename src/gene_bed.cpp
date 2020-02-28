@@ -1,5 +1,5 @@
 #include "gene_bed.h"
-#include "SSP/common/inline.hpp"
+#include "DROMPAplus/submodules/SSP/common/inline.hpp"
 
 namespace {
 class strRange : public bed {

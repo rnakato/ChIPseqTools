@@ -6,11 +6,12 @@
 #include <fstream>
 #include <math.h>
 #include <boost/filesystem.hpp>
-#include "SSP/common/BoostOptions.hpp"
-#include "SSP/common/inline.hpp"
-#include "SSP/src/ParseMapfile.hpp"
-#include "SSP/src/Mapfile.hpp"
-#include "SSP/src/LibraryComplexity.hpp"
+#include "DROMPAplus/src/extendBedFormat.hpp"
+#include "DROMPAplus/submodules/SSP/common/BoostOptions.hpp"
+#include "DROMPAplus/submodules/SSP/common/inline.hpp"
+#include "DROMPAplus/submodules/SSP/src/ParseMapfile.hpp"
+#include "DROMPAplus/submodules/SSP/src/Mapfile.hpp"
+#include "DROMPAplus/submodules/SSP/src/LibraryComplexity.hpp"
 
 class globalopt{
   MyOpt::Opts opt;
@@ -28,7 +29,7 @@ public:
       ("repeattype", boost::program_options::value<std::string>()->default_value("class"), "Repeat type: [class|family|name]")
       ;
   }
-  
+
   void setOpts(MyOpt::Opts &allopts) {
     genome.setOpts(allopts);
     allopts.add(opt);
@@ -52,7 +53,7 @@ void help_global()
 ===============
 
 Usage: FRiR [option] -r <repeatfile> -i <inputfile> -o <output> --gt <genome_table>)";
-  
+
   std::cerr << "\nFRiR" << helpmsg << std::endl;
   return;
 }
@@ -72,7 +73,7 @@ mapRep read_Repeatfile(const std::string &filename, const std::string &type)
   std::vector<std::string> v;
   while (!in.eof()) {
     getline(in, lineStr);
-    
+
     if(lineStr.empty() || lineStr[0] == '#') continue;
     boost::split(v, lineStr, boost::algorithm::is_any_of("\t"));
 
@@ -98,7 +99,7 @@ uint64_t countReadsChr(const std::vector<bed> &vbed, const SeqStats &chr, uint64
   OverrideBedToArray(array, chr.getname(), vbed);
 
   len += std::count(array.begin(), array.end(), BpStatus::INBED);
-  
+
   for (auto strand: {Strand::FWD, Strand::REV}) {
     for (auto &x: chr.getvReadref(strand)) {
       //      if(x.duplicate) continue;
@@ -133,7 +134,7 @@ int main(int argc, char* argv[])
   p.complexity.checkRedundantReads(p.genome);
 
   auto Repeat = read_Repeatfile(p.getrepeatfilename(), p.getrepeattype());
-  
+
   std::ofstream out(p.getoutput());
 
   out << "Type\ttotal length\t% genome\tread number\t% genome\tlog10(read/length)" << std::endl;
@@ -150,7 +151,7 @@ int main(int argc, char* argv[])
 
   return 0;
 }
-  
+
 void getOpts(globalopt &p, int argc, char* argv[])
 {
   DEBUGprint("setOpts...");
@@ -162,9 +163,9 @@ void getOpts(globalopt &p, int argc, char* argv[])
   MyOpt::setOptOther(allopts);
 
   DEBUGprint("getOpts...");
-    
+
   MyOpt::Variables values;
-    
+
   try {
     boost::program_options::parsed_options parsed = parse_command_line(argc, argv, allopts);
     store(parsed, values);
@@ -185,9 +186,9 @@ void getOpts(globalopt &p, int argc, char* argv[])
   }
   std::vector<std::string> opts = {"input", "output", "gt"};
   for (auto x: opts) {
-    if (!values.count(x)) PRINTERR("specify --" << x << " option.");
+    if (!values.count(x)) PRINTERR_AND_EXIT("specify --" << x << " option.");
   }
-      
+
   try {
     notify(values);
     p.setValues(values);
@@ -197,8 +198,7 @@ void getOpts(globalopt &p, int argc, char* argv[])
     std::cout << e.what() << std::endl;
     exit(0);
   }
-    
+
   DEBUGprint("getOpts done.");
   return;
 }
-

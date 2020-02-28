@@ -9,9 +9,9 @@
 #include <boost/accumulators/statistics.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include "SSP/common/util.hpp"
 #include "gene_bed.h"
-#include "SSP/common/statistics.hpp"
+#include "DROMPAplus/submodules/SSP/common/util.hpp"
+#include "DROMPAplus/submodules/SSP/common/statistics.hpp"
 
 using namespace std;
 using namespace boost::accumulators;

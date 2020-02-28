@@ -10,12 +10,13 @@ OBJDIR = ./obj
 OBJ_CDIR = ./obj_C
 LIBDIR = ./lib
 BINDIR = ./bin
-SSPDIR = ./src/SSP
+DROMPADIR = ./src/DROMPAplus
+DROMPAOBJDIR = $(DROMPADIR)/obj
+SSPDIR = $(DROMPADIR)/submodules/SSP
 SSPSRCDIR = $(SSPDIR)/src
 SSPCMNDIR = $(SSPDIR)/common
 SSPOBJDIR = $(SSPDIR)/obj
 SSPCMNOBJDIR = $(SSPDIR)/cobj
-ALGLIBDIR = $(SSPCMNDIR)/alglib
 
 PROGRAMS = compare_bed2loop gtf2refFlat parseChIADropReadList compare_bed2tss peak_occurance multibed2gene FRiR compare_bs mergebed2CRM
 TARGET = $(addprefix $(BINDIR)/,$(PROGRAMS))
@@ -25,7 +26,7 @@ ifdef DEBUG
 CFLAGS += -DDEBUG
 endif
 
-OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(SSPCMNOBJDIR)/ReadAnnotation.o
+OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(DROMPAOBJDIR)/ReadAnnotation.o
 OBJS_GTF  = $(OBJDIR)/gtf2refFlat.o
 OBJS_PCD  = $(OBJDIR)/parseChIADropReadList.o
 OBJS_LOOP = $(OBJDIR)/compare_bed2loop.o $(OBJDIR)/gene_bed.o
@@ -71,6 +72,8 @@ $(BINDIR)/mergebed2CRM: $(OBJS_CRM)
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	gcc -o $@ $^ $(CFLAGS_C)
 
+$(DROMPAOBJDIR)/%.o: $(DROMPADIR)/src/%.cpp
+	$(MAKE) -C $(DROMPADIR) $(OBJDIR)/$(notdir $@)
 $(SSPOBJDIR)/%.o: $(SSPSRCDIR)/%.cpp
 	$(MAKE) -C $(SSPDIR) $(OBJDIR)/$(notdir $@)
 $(SSPCMNOBJDIR)/%.o: $(SSPCMNDIR)/%.cpp

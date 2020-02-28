@@ -5,8 +5,8 @@
 #include <fstream>
 #include <boost/program_options.hpp>
 #include <unordered_map>
-#include "SSP/common/util.hpp"
-#include "SSP/common/BedFormat.hpp"
+#include "DROMPAplus/submodules/SSP/common/util.hpp"
+#include "DROMPAplus/src/extendBedFormat.hpp"
 
 class readpair {
  public:
