@@ -1,3 +1,7 @@
 [submodule "src/SSP"]
 	path = src/SSP
 	url = https://github.com/rnakato/SSP.git
+[submodule "src/DROMPAplus"]
+	path = src/DROMPAplus
+	url = https://github.com/rnakato/DROMPAplus.git
+	branch = master

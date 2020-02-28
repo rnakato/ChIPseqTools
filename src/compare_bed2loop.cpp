@@ -25,7 +25,7 @@ Variables argv_init(int argc, char* argv[])
     ;
 
   Variables values;
-  
+
   if (argc==1) {
     std::cout << "\nUsage: compare_bed2loop [option] --bed1 <1st bed> --bed2 <2nd bed> --loop <loop file> -o <output> -gt <genome_table>\n"
 	      << allopts
@@ -35,7 +35,7 @@ Variables argv_init(int argc, char* argv[])
   try {
     boost::program_options::parsed_options parsed = parse_command_line(argc, argv, allopts);
     store(parsed, values);
-    
+
     if (values.count("help")) {
       std::cout << "\nUsage: compare_bed2loop [option] --bed1 <1st bed> --bed2 <2nd bed> --loop <loop file> -o <output> -gt <genome_table>\n"
 		<< allopts
@@ -78,8 +78,8 @@ int main(int argc, char* argv[])
   std::cout << "# Bed2: " << bed2file << std::endl;
   std::cout << "# Number: " << vbed2.size() << std::endl;
   std::cout << "# Loop file: " << loopfile << std::endl;
-  
+
   interset.compare_bed_loop(vbed1, vbed2, values.count("nobs"));
-  
+
   return 0;
 }
