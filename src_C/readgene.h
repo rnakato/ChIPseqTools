@@ -23,6 +23,7 @@ typedef enum{
 } genefiletype;
 
 struct bs{
+  char line[10240];
   char chr[128];
   int start;
   int end;
@@ -33,7 +34,6 @@ struct bs{
   int totss;
   updown updown_fromtss;
   int geneid;
-  char line[1024];
 };
 
 struct bs_overlap{
@@ -94,7 +94,9 @@ int read_gene_ENS(char *filename, struct gene **ref_gene, int);
 int read_refFlat(char *filename, struct gene **ref_gene, int);
 int read_refseq(char *filename, struct gene **ref_gene);
 void print1bs(struct bs *bsarray, int i);
+void print1bsstr(struct bs *bsarray, int i);
 void print1bs_overlap(struct bs_overlap *bsarray, struct bs *, struct bs *, int i);
+void print1bsstr_overlap(struct bs_overlap *bsarray, struct bs *, struct bs *, int i);
 
 void compare(struct peakset *peakset, int sample1, int sample2, int extend_length);
 
