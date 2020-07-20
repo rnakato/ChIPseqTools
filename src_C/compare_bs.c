@@ -52,8 +52,24 @@ int main(int argc, char *argv[]) {
   compare(peakset, 0, 1, extend_length);
 
   printf("#file1: %s\n#file2: %s\n", peakset[0].file, peakset[1].file);
-  printf("#num1: %d\tnum2: %d\tnum1_overlap: %d (%.1f%%)\tnum1_notoverlap: %d (%.1f%%)\tnum2_overlap: %d (%.1f%%)\tnum2_notoverlap: %d (%.1f%%)\n", peakset[0].num, peakset[1].num, peakset[0].cnt_overlap[1], (100*peakset[0].cnt_overlap[1]/(double)peakset[0].num), peakset[0].cnt_notoverlap[1], (100*peakset[0].cnt_notoverlap[1]/(double)peakset[0].num), peakset[1].cnt_overlap[0], (100*peakset[1].cnt_overlap[0]/(double)peakset[1].num), peakset[1].cnt_notoverlap[0], (100*peakset[1].cnt_notoverlap[0]/(double)peakset[1].num));
-  printf("#peakwidth total1: %d bp\tpeakwidth total2: %d bp\toverlappeaks total: %d bp (%.2f%% / %.2f%%)\n", peakset[0].peakwid_total, peakset[1].peakwid_total, peakset[0].base_overlap[1], (peakset[0].base_overlap[1]/(double)peakset[0].peakwid_total)*100, (peakset[0].base_overlap[1]/(double)peakset[1].peakwid_total)*100);
+  printf("#num1: %d\tnum2: %d\tnum1_overlap: %d (%.1f%%)\tnum1_notoverlap: %d (%.1f%%)\tnum2_overlap: %d (%.1f%%)\tnum2_notoverlap: %d (%.1f%%)\n",
+         peakset[0].num, peakset[1].num,
+         peakset[0].cnt_overlap[1],
+         (100 * peakset[0].cnt_overlap[1] / (double)peakset[0].num),
+         peakset[0].cnt_notoverlap[1],
+         (100 * peakset[0].cnt_notoverlap[1] / (double)peakset[0].num),
+         peakset[1].cnt_overlap[0],
+         (100 * peakset[1].cnt_overlap[0] / (double)peakset[1].num),
+         peakset[1].cnt_notoverlap[0],
+         (100 * peakset[1].cnt_notoverlap[0] / (double)peakset[1].num));
+
+  printf("#peakwidth total1: %d bp\tpeakwidth total2: %d bp\toverlappeaks total: %d bp (%.2f%% / %.2f%%)\n",
+         peakset[0].peakwid_total,
+         peakset[1].peakwid_total,
+         peakset[0].base_overlap[1],
+         (peakset[0].base_overlap[1] / (double)peakset[0].peakwid_total)*100,
+         (peakset[0].base_overlap[1] / (double)peakset[1].peakwid_total)*100);
+
   if (nobs) exit(0);
 
   if (unison==2) {
@@ -78,9 +94,10 @@ int main(int argc, char *argv[]) {
         print1bsstr(peakset[0].bsarray, i);
       }
     }
-}
+  }
 
-  for (i=0;i<samplenum;i++) {
+
+  for (i=0; i<samplenum; i++) {
     free(peakset[i].bsarray);
     for (j=0; j<samplenum; j++) free(peakset[i].bsarray_overlap[j]);
     free(peakset[i].bsarray_overlap);
