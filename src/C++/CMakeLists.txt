@@ -19,7 +19,7 @@ add_executable(compare_bed2tss compare_bed2tss.cpp gene_bed.cpp)
 target_link_libraries(compare_bed2tss common ssp_common dd_func -lboost_program_options -lboost_system -lboost_filesystem -lboost_iostreams -lgsl -lgslcblas)
 
 add_executable(peak_occurance peak_occurance.cpp gene_bed.cpp statistics.cpp)
-target_link_libraries(peak_occurance common ssp_common -lboost_program_options -lboost_system -lboost_filesystem -lboost_iostreams -lgsl -lgslcblas)
+target_link_libraries(peak_occurance common ssp_common dd_func -lboost_program_options -lboost_system -lboost_filesystem -lboost_iostreams -lgsl -lgslcblas)
 
 #add_executable(multibed2gene multibed2gene.cpp gene_bed.cpp)
 #target_link_libraries(compare_bed2tss common ssp_common dd_func -lboost_system -lboost_filesystem -lboost_iostreams -lboost_program_options -lgsl -lgslcblas)

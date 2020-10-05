@@ -14,7 +14,7 @@ all: $(TARGET) $(HTSLIBDIR)/libhts.a
 $(TARGET): $(HTSLIBDIR)/libhts.a
 	mkdir -p build && cd build && cmake .. && make
 	mkdir -p bin
-#	cp build/test/parse2wig/parse2wig+ build/test/drompa/drompa+ bin
+	cp build/src/C/compare_bs build/src/C/compare_bs2CRM build/src/C++/compare_bed2tss build/src/C++/peak_occurance build/src/C++/gtf2refFlat build/src/C++/compare_bed2loop build/src/C++/parseChIADropReadList bin
 
 $(HTSLIBDIR)/libhts.a:
 	$(MAKE) -C $(HTSLIBDIR)
