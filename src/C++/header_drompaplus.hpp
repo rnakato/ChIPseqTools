@@ -1,0 +1,8 @@
+#include "../../DROMPAplus/submodules/SSP/common/inline.hpp"
+#include "../../DROMPAplus/src/drompa/ReadAnnotation.hpp"
+#include "../../DROMPAplus/src/common/GeneAnnotation.hpp"
+#include "../../DROMPAplus/src/common/extendBedFormat.hpp"
+#include "../../DROMPAplus/src/common/BpStatus.hpp"
+#include "../../DROMPAplus/submodules/SSP/common/BoostOptions.hpp"
+#include "../../DROMPAplus/submodules/SSP/src/LibraryComplexity.hpp"
+#include "../../DROMPAplus/submodules/SSP/src/Mapfile.hpp"
