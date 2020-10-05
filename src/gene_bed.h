@@ -5,9 +5,9 @@
 #define GENE_BED_H
 
 #include <boost/format.hpp>
-#include "DROMPAplus/src/ReadAnnotation.hpp"
-#include "DROMPAplus/src/GeneAnnotation.hpp"
-#include "DROMPAplus/src/extendBedFormat.hpp"
+#include "DROMPAplus/src/drompa/ReadAnnotation.hpp"
+#include "DROMPAplus/src/common/GeneAnnotation.hpp"
+#include "DROMPAplus/src/common/extendBedFormat.hpp"
 
 class tssdist {
  public:

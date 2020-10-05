@@ -6,7 +6,7 @@
 #include <fstream>
 #include <math.h>
 #include <boost/filesystem.hpp>
-#include "DROMPAplus/src/extendBedFormat.hpp"
+#include "DROMPAplus/src/common/extendBedFormat.hpp"
 #include "DROMPAplus/submodules/SSP/common/BoostOptions.hpp"
 #include "DROMPAplus/submodules/SSP/common/inline.hpp"
 #include "DROMPAplus/submodules/SSP/src/ParseMapfile.hpp"

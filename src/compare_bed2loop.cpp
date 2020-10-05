@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include "DROMPAplus/src/extendBedFormat.hpp"
-#include "DROMPAplus/src/ReadAnnotation.hpp"
 #include "gene_bed.h"
 #include "DROMPAplus/submodules/SSP/common/inline.hpp"
 

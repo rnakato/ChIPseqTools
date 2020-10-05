@@ -26,7 +26,7 @@ ifdef DEBUG
 CFLAGS += -DDEBUG
 endif
 
-OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(DROMPAOBJDIR)/ReadAnnotation.o
+OBJS_UTIL = $(SSPCMNOBJDIR)/util.o $(DROMPAOBJDIR)/ReadAnnotation.o $(DROMPAOBJDIR)/extendBedFormat.o
 OBJS_GTF  = $(OBJDIR)/gtf2refFlat.o
 OBJS_PCD  = $(OBJDIR)/parseChIADropReadList.o
 OBJS_LOOP = $(OBJDIR)/compare_bed2loop.o $(OBJDIR)/gene_bed.o
@@ -72,8 +72,8 @@ $(BINDIR)/mergebed2CRM: $(OBJS_CRM)
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	gcc -o $@ $^ $(CFLAGS_C)
 
-$(DROMPAOBJDIR)/%.o: $(DROMPADIR)/src/%.cpp
-	$(MAKE) -C $(DROMPADIR) $(OBJDIR)/$(notdir $@)
+$(DROMPAOBJDIR)/%.o: $(DROMPADIR)/src/common/%.cpp
+	$(MAKE) -C $(DROMPADIR)
 $(SSPOBJDIR)/%.o: $(SSPSRCDIR)/%.cpp
 	$(MAKE) -C $(SSPDIR) $(OBJDIR)/$(notdir $@)
 $(SSPCMNOBJDIR)/%.o: $(SSPCMNDIR)/%.cpp
