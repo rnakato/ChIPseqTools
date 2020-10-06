@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
-project(ChIPseqTools CXX)
+#cmake_minimum_required(VERSION 2.8)
+#project(ChIPseqTools CXX)
 
-set( CMAKE_CXX_STANDARD 14 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_CXX_EXTENSIONS OFF )
-set( CMAKE_CXX_FLAGS "-std=c++14 -fconcepts -O2 -W -Wall -lboost_program_options")
+#set( CMAKE_CXX_STANDARD 14 )
+#set( CMAKE_CXX_STANDARD_REQUIRED ON )
+#set( CMAKE_CXX_EXTENSIONS OFF )
+#set( CMAKE_CXX_FLAGS "-std=c++14 -O2 -W -Wall")
 
 add_executable(compare_bed2loop compare_bed2loop.cpp gene_bed.cpp)
 target_link_libraries(compare_bed2loop ssp_common common -lboost_program_options -lboost_system -lboost_filesystem -lboost_iostreams -lgsl -lgslcblas)
