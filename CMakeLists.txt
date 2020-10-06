@@ -9,5 +9,5 @@
 include_directories("/usr/local/include")
 
 add_subdirectory(src/C)
-add_subdirectory(DROMPAplus)
+add_subdirectory(submodules/DROMPAplus)
 add_subdirectory(src/C++)

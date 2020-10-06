@@ -1,4 +1,2 @@
-docs/_build/
+build/
 bin/
-obj/
-obj_C

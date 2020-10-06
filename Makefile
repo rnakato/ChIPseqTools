@@ -6,7 +6,7 @@ PROGRAMS_CPP = compare_bed2loop gtf2refFlat parseChIADropReadList compare_bed2ts
 
 TARGET = $(addprefix $(BINDIR)/,$(PROGRAMS_C) $(BINDIR)/,$(PROGRAMS_CPP))
 
-SSPDIR = DROMPAplus/submodules/SSP
+SSPDIR = submodules/DROMPAplus/submodules/SSP
 HTSLIBDIR = $(SSPDIR)/src/htslib-1.10.2/
 
 all: $(TARGET) $(HTSLIBDIR)/libhts.a
