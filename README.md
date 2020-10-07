@@ -16,6 +16,10 @@ for CentOS:
 
     sudo yum -y install git gcc-c++ boost-devel
 
+On Mac:
+
+     brew install gsl gtk gtkmm pkgconfig curl xz zlib boost cmake gzstream
+
 #### 2.3. Install 
     git clone --recursive https://github.com/rnakato/ChIPseqTools.git
     cd ChIPseqTools
