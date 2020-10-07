@@ -20,17 +20,17 @@ On Mac:
 
      brew install gsl gtk gtkmm pkgconfig curl xz zlib boost cmake gzstream
 
-#### 2.3. Install 
+#### 2.2. Install 
     git clone --recursive https://github.com/rnakato/ChIPseqTools.git
     cd ChIPseqTools
     make
 
-#### 2.4. Add the PATH environment variable
-If you downloaded DROMPA and cpdf into the $HOME/my_chipseq_exp directory, type:
+#### 2.3. Add the PATH environment variable
 
     export PATH = $PATH:(PATH_TO_ChIPseqTools)/ChIPseqTools/bin
 
-#### 2.5 (Optional) Update repository
+#### 2.4 (Optional) Update repository
+
     git pull origin master
     git submodule foreach git pull origin master
 
