@@ -51,8 +51,8 @@ struct peakset{
   struct bs *bsarray;
   struct bs_overlap **bsarray_overlap;
   int bsarraynum;
-  int peakwid_total;
-  int *base_overlap;
+  unsigned long long peakwid_total;
+  unsigned long long *base_overlap;
   int *cnt_overlap;
   int *cnt_notoverlap;
   int *cnt_overlap_red;
