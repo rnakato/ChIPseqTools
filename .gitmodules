@@ -1,6 +1,6 @@
 [submodule "submodules/DROMPAplus"]
 	path = submodules/DROMPAplus
-	url = git@github.com:rnakato/DROMPAplus.git
+    url = https://github.com/rnakato/DROMPAplus.git
 [submodule "submodules/SSP"]
 	path = submodules/SSP
-	url = git@github.com:rnakato/SSP.git
+    url = https://github.com/rnakato/SSP.git%
