@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
          peakset[1].cnt_notoverlap[0],
          (100 * peakset[1].cnt_notoverlap[0] / (double)peakset[1].num));
 
-  printf("#peakwidth total1: %d bp\tpeakwidth total2: %ul bp\toverlappeaks total: %d bp (%.2f%% / %.2f%%)\n",
+  printf("#peakwidth total1: %d bp\tpeakwidth total2: %u bp\toverlappeaks total: %d bp (%.2f%% / %.2f%%)\n",
          peakset[0].peakwid_total,
          peakset[1].peakwid_total,
          peakset[0].base_overlap[1],
