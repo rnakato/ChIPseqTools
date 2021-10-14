@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
   }
   for (i=0; i<samplenum; i++) {
     for (j=0; j<samplenum; j++) {
-      peakset[i].bsarray_overlap[j] = (struct bs_overlap *)my_calloc(peakset[i].num+peakset[j].num, sizeof(struct bs_overlap), "bsarray_overlap");
+      peakset[i].bsarray_overlap[j] = (struct bs_overlap *)my_calloc((peakset[i].num + peakset[j].num)*10, sizeof(struct bs_overlap), "bsarray_overlap");
     }
   }
   compare(peakset, 0, 1, extend_length);
@@ -73,38 +73,40 @@ int main(int argc, char *argv[]) {
   if (nobs) exit(0);
 
   if (unison==2) {
-//    printf("chromosome\tstart\tend\tsummit 1\tsummit 2\tenrich 1\tenrich 2\tintensity 1\tintensity 2\tA (log2(1*2)/2)\tM (log2(1/2))\tdiff of summit\n");
     for (i=0; i<peakset[0].cnt_overlap_red[1]; i++) {
-//      print1bs_overlap(peakset[0].bsarray_overlap[1], peakset[0].bsarray, peakset[1].bsarray, i);
       print1bsstr_overlap(peakset[0].bsarray_overlap[1], peakset[0].bsarray, peakset[1].bsarray, i);
     }
-  }else if (unison==1) {
-//   printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
+  } else if (unison==1) {
     for (i=0; i<peakset[0].num; i++) {
-      if (peakset[0].bsarray[i].overlap[1]) {
-//        print1bs(peakset[0].bsarray, i);
-        print1bsstr(peakset[0].bsarray, i);
-      }
+///      printf("peaksetnum=%d i=%d  overlap=%d\n",peakset[0].num,i, peakset[0].bsarray[i].overlap[1]);
+      if (peakset[0].bsarray[i].overlap[1]) print1bsstr(peakset[0].bsarray, i);
     }
-  }else{
-//    printf("chromosome\tstart\tend\tsummit\tlength\tenrich\tintensity\n");
+  } else {
     for (i=0; i<peakset[0].num; i++) {
-      if (!(peakset[0].bsarray[i].overlap[1])) {
- //       print1bs(peakset[0].bsarray, i);
-        print1bsstr(peakset[0].bsarray, i);
-      }
+      if (!(peakset[0].bsarray[i].overlap[1])) print1bsstr(peakset[0].bsarray, i);
     }
   }
 
 
   for (i=0; i<samplenum; i++) {
+//    printf("test\n");
     free(peakset[i].bsarray);
-    for (j=0; j<samplenum; j++) free(peakset[i].bsarray_overlap[j]);
+//    printf("test2\n");
+    for (j=0; j<samplenum; j++) {
+ //     printf("j %d num %d\n",j,samplenum);
+      free(peakset[i].bsarray_overlap[j]);
+    }
+ //   printf("test3\n");
     free(peakset[i].bsarray_overlap);
+//    printf("test4\n");
     free(peakset[i].base_overlap);
+//    printf("test5\n");
     free(peakset[i].cnt_overlap);
+ //   printf("test6\n");
     free(peakset[i].cnt_notoverlap);
+ //   printf("test7\n");
     free(peakset[i].cnt_overlap_red);
+ //   printf("test8\n");
   }
   return 0;
 }

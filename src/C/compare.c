@@ -43,15 +43,15 @@ static void getoverlap(struct peakset *peakset, int sample1, int sample2, int i,
 void compare(struct peakset *peakset, int sample1, int sample2, int extend_length)
 {
   int i,j, num=0;
-  for (i=0; i<peakset[sample1].num; i++){
-    for (j=0; j<peakset[sample2].num; j++){
+  for (i=0; i<peakset[sample1].num; i++) {
+    for (j=0; j<peakset[sample2].num; j++) {
       int ext_start = 0;
       if (peakset[sample1].bsarray[i].start > extend_length) ext_start = peakset[sample1].bsarray[i].start - extend_length;
 //      printf("l=%d, ext_start=%d, stasrt=%d\n", extend_length, ext_start, peakset[sample1].bsarray[i].start);
 
       if (!strcmp(peakset[sample1].bsarray[i].chr, peakset[sample2].bsarray[j].chr)
          && peakset[sample2].bsarray[j].start <= peakset[sample1].bsarray[i].end + extend_length
-         && peakset[sample2].bsarray[j].end >= ext_start){
+         && peakset[sample2].bsarray[j].end >= ext_start) {
         getoverlap(peakset, sample1, sample2, i, j, num);
         if (sample1 != sample2) getoverlap(peakset, sample2, sample1, j, i, num);
         num++;
