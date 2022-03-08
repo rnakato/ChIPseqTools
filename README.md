@@ -1,12 +1,45 @@
 # ChIPseqTools
 
-# 1. Overview
+## 1. Overview
 This repository contains several utility tools for ChIP-seq and other epigenome analysis.
 These programs are written in ANCI C and C++11 using [Boost library](http://www.boost.org/).
 
-# 2. Install
+## 2. Install
 
-#### 2.1. Install required libraries
+### 2.1. Docker image
+
+We recommend to use the latest Docker image from [DockerHub](https://hub.docker.com/r/rnakato/ssp_drompa).
+
+#### 2.1.1. Docker 
+ To use docker command, type:
+
+    docker pull rnakato/ssp_drompa
+    docker run -it --rm rnakato/ssp_drompa <command>
+
+**Note**: When using the docker image, it is necessary to mount the directory by ``-v`` option to access the input files as follows:
+
+    docker run -it --rm -v $(pwd):/mnt rnakato/ssp_drompa parse2wig+ \
+             -i /mnt/ChIP.bam -o ChIP --odir /mnt/parse2wigdir+ --gt /mnt/genometable.txt
+
+This command mounts the current directory to ``/mnt`` directory in the container. 
+Please see also the [document of Docker](https://docs.docker.com/storage/volumes/).
+
+#### 2.1.2. Singularity
+
+Singularity can also be used to execute the docker image:
+
+    singularity build ssp_drompa.img docker://rnakato/ssp_drompa
+    singularity exec ssp_drompa.img <command>
+
+Singularity mounts the current directory automatically. If you access the files in the other directory, please mount by `--bind` option, for instance:
+
+    singularity exec --bind /work ssp_drompa.img <command>
+    
+This command mounts `/work` directory.
+
+### 2.2. Building from source
+
+#### 2.2.1. Install required libraries
 for Ubuntu:
 
     sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev ibgtkmm-3.0-dev \
@@ -20,16 +53,16 @@ On Mac:
 
      brew install gsl gtk gtkmm pkgconfig curl xz zlib boost cmake gzstream
 
-#### 2.2. Install 
+#### 2.2.2. Install 
     git clone --recursive https://github.com/rnakato/ChIPseqTools.git
     cd ChIPseqTools
     make
 
-#### 2.3. Add the PATH environment variable
+#### 2.2.3. Add the PATH environment variable
 
     export PATH = $PATH:(PATH_TO_ChIPseqTools)/ChIPseqTools/bin
 
-#### 2.4 (Optional) Update repository
+#### 2.2.4 (Optional) Update repository
 
     git pull origin master
     git submodule foreach git pull origin master
