@@ -9,7 +9,7 @@ These programs are written in ANCI C and C++11 using [Boost library](http://www.
 #### 2.1. Install required libraries
 for Ubuntu:
 
-    sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev \
+    sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev ibgtkmm-3.0-dev \
                      liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
  
 for CentOS:
