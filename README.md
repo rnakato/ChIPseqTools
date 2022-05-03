@@ -43,7 +43,7 @@ This command mounts `/work` directory.
 for Ubuntu:
 
     sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev ibgtkmm-3.0-dev \
-                     liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
+                     libgsl-dev liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
 
 for CentOS:
 
