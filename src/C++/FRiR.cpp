@@ -7,6 +7,7 @@
 #include <math.h>
 #include <boost/filesystem.hpp>
 #include "header_drompaplus.hpp"
+#include "../../submodules/SSP/common/gzstream.h"
 
 class globalopt{
   MyOpt::Opts opt;
@@ -55,14 +56,9 @@ Usage: FRiR [option] -r <repeatfile> -i <inputfile> -o <output> --gt <genome_tab
 
 using mapRep = std::unordered_map<std::string, std::vector<bed>>;
 
-mapRep read_Repeatfile(const std::string &filename, const std::string &type)
+template <class T>
+mapRep func_readRepeatfile(T &in, const std::string &type)
 {
-  std::ifstream in(filename);
-  if(!in) {
-    std::cerr << "Error: Repeat file does not exist." << std::endl;
-    std::exit(1);
-  }
-
   mapRep Repeat;
   std::string lineStr;
   std::vector<std::string> v;
@@ -75,13 +71,35 @@ mapRep read_Repeatfile(const std::string &filename, const std::string &type)
     std::string repName(v[10]);
     std::string repClass(v[11]);
     std::string repFamily(v[12]);
-    if(type == "class")    Repeat[repClass].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
-    else if(type == "family") Repeat[repFamily].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
-    else if(type == "name")   Repeat[repName].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
+    if (type == "class")       Repeat[repClass].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
+    else if (type == "family") Repeat[repFamily].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
+    else if (type == "name")   Repeat[repName].emplace_back(v[5], stoi(v[6]), stoi(v[7]));
     else {
       std::cerr << "Error: invalid repeattype.\n";
       exit(0);
     }
+  }
+
+  return Repeat;
+}
+
+
+mapRep read_Repeatfile(const std::string &filename, const std::string &type)
+{
+  std::vector<std::string> v;
+  ParseLine(v, filename, '.');
+
+  mapRep Repeat;
+  if (v[v.size()-1] == "gz") {
+    igzstream in(filename.c_str());
+    Repeat = func_readRepeatfile(in, type);
+  } else {
+    std::ifstream in(filename);
+    if(!in) {
+      std::cerr << "Error: Repeat file does not exist." << std::endl;
+      std::exit(1);
+    }
+    Repeat = func_readRepeatfile(in, type);
   }
 
   return Repeat;

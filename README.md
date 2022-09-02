@@ -142,6 +142,9 @@ proportion of peaks against whole genome (distinguish exon and instron)
          -qnt: quantitative analysis
 
 #### 3.6. FRiR
+
 Repeat analysis.
 
        FRiR [option] -r <repeatfile> -i <inputfile> -o <output> --gt <genome_table>
+
+<repeatfile> is the RepeatMasker file downloaded from UCSC genome broswer. FRiR can allow a gziped repeat file.
