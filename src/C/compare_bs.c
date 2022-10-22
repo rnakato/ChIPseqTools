@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
          peakset[1].cnt_notoverlap[0],
          (100 * peakset[1].cnt_notoverlap[0] / (double)peakset[1].num));
 
-  printf("#peakwidth total1: %d bp\tpeakwidth total2: %u bp\toverlappeaks total: %d bp (%.2f%% / %.2f%%)\n",
+  printf("#peakwidth total1: %llu bp\tpeakwidth total2: %llu bp\toverlappeaks total: %llu bp (%.2f%% / %.2f%%)\n",
          peakset[0].peakwid_total,
          peakset[1].peakwid_total,
          peakset[0].base_overlap[1],
@@ -129,7 +129,7 @@ static void argv_init(int argc, char **argv, struct peakset *peakset, int *exten
     peakset[i].cnt_overlap = (int *)my_calloc(samplenum, sizeof(int), "cnt_overlap");
     peakset[i].cnt_notoverlap = (int *)my_calloc(samplenum, sizeof(int), "cnt_notoverlap");
     peakset[i].cnt_overlap_red = (int *)my_calloc(samplenum, sizeof(int), "cnt_overlap_red");
-    peakset[i].base_overlap = (int *)my_calloc(samplenum, sizeof(int), "base_overlap");
+    peakset[i].base_overlap = (long long unsigned int *)my_calloc(samplenum, sizeof(int), "base_overlap");
   }
 
   for (i=1; i<argc; i++) {
