@@ -147,4 +147,4 @@ Repeat analysis.
 
        FRiR [option] -r <repeatfile> -i <inputfile> -o <output> --gt <genome_table>
 
-<repeatfile> is the RepeatMasker file downloaded from UCSC genome broswer. FRiR can allow a gziped repeat file.
+<repeatfile> is the RepeatMasker file downloaded from the UCSC genome browser. FRiR can allow a gzipped repeat file.
