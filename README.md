@@ -42,7 +42,7 @@ This command mounts `/work` directory.
 #### 2.2.1. Install required libraries
 for Ubuntu:
 
-    sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev ibgtkmm-3.0-dev \
+    sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev libgtkmm-3.0-dev \
                      libgsl-dev liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
 
 for CentOS:
