@@ -18,7 +18,7 @@ jobs:
         
     - name: apt install
       run: 
-        sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev ibgtkmm-3.0-dev libgsl-dev liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
+        sudo apt install git build-essential libboost-all-dev libcurl4-gnutls-dev libgtkmm-3.0-dev libgsl-dev liblzma-dev libz-dev libbz2-dev libgzstream0 libgzstream-dev cmake
 
     - name: make
       run: 
