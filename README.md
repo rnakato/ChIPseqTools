@@ -24,16 +24,16 @@ We recommend to use the latest Docker image from [DockerHub](https://hub.docker.
 This command mounts the current directory to ``/mnt`` directory in the container.
 Please see also the [document of Docker](https://docs.docker.com/storage/volumes/).
 
-#### 2.1.2. Singularity
+#### 2.1.2. Apptainer
 
-Singularity can also be used to execute the docker image:
+Apptainer can also be used to execute the docker image:
 
-    singularity build ssp_drompa.sif docker://rnakato/ssp_drompa
-    singularity exec ssp_drompa.sif <command>
+    apptainer build ssp_drompa.sif docker://rnakato/ssp_drompa
+    apptainer exec ssp_drompa.sif <command>
 
-Singularity mounts the current directory automatically. If you access the files in the other directory, please mount by `--bind` option, for instance:
+Apptainer mounts the current directory automatically. If you access the files in the other directory, please mount by `--bind` option, for instance:
 
-    singularity exec --bind /work ssp_drompa.sif <command>
+    apptainer exec --bind /work ssp_drompa.sif <command>
 
 This command mounts `/work` directory.
 
